@@ -1,9 +1,5 @@
 package com.deni.hilhamsyah.cookhub.domain.model
 
-
-/**
- *
- */
 data class User(
     val me: Boolean,
     val id: String?,
