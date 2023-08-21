@@ -10,6 +10,6 @@ data class Recipe(
     val description: String,
     val image: String,
     val video: String?,
-    val ingredients: List<Pair<Int, WeightUnit>>,
+    val ingredients: List<Pair<String, Pair<Int, WeightUnit>>>,
     val cookTime: Pair<Int, TimeUnit>
 )
