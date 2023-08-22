@@ -12,6 +12,8 @@ interface AuthRepository {
 
     fun registerWithEmailAndPassword(email: String, password: String): Flow<Resource<Int>>
 
+    fun isLoggedIn(): Boolean
+
     fun getCurrentUser(): FirebaseUser?
 
     fun getIdToken(forceRefresh: Boolean): Flow<Resource<String>>

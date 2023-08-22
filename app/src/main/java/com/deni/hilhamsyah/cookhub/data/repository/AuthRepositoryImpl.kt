@@ -45,6 +45,10 @@ class AuthRepositoryImpl @Inject constructor(
         }
     }
 
+    override fun isLoggedIn(): Boolean {
+        return getCurrentUser() != null
+    }
+
     override fun getCurrentUser(): FirebaseUser? {
         return firebaseAuth.currentUser
     }
