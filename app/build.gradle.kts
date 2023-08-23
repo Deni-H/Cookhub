@@ -73,6 +73,7 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
+    implementation("androidx.compose.runtime:runtime")
 
     // Firebase
     implementation(platform("com.google.firebase:firebase-bom:32.2.2"))
@@ -84,6 +85,7 @@ dependencies {
 
     // Dagger hilt
     implementation("com.google.dagger:hilt-android:2.44")
+    implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
     kapt("com.google.dagger:hilt-android-compiler:2.44")
 
     // Datastore

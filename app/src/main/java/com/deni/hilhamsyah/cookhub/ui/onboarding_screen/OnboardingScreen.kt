@@ -40,9 +40,10 @@ import com.deni.hilhamsyah.cookhub.ui.theme.CookhubTheme
 
 @Composable
 fun OnboardingScreen(
-    navController: NavController
+    navController: NavController,
 ) {
     val context = LocalContext.current
+
     Box(modifier = Modifier.fillMaxSize()) {
         Image(
             modifier = Modifier.fillMaxSize(),
