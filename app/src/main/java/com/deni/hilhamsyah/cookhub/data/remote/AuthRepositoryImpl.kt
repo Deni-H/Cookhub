@@ -1,4 +1,4 @@
-package com.deni.hilhamsyah.cookhub.data.repository
+package com.deni.hilhamsyah.cookhub.data.remote
 
 import com.deni.hilhamsyah.cookhub.domain.repository.AuthRepository
 import com.deni.hilhamsyah.cookhub.util.Resource
@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
-class AuthRepositoryImpl @Inject constructor(
+class AuthRepositoryImpl (
     private val firebaseAuth: FirebaseAuth
 ) : AuthRepository {
     override fun loginWithCredentials(credentials: AuthCredential): Flow<Resource<Int>> {
