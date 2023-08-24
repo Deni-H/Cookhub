@@ -8,6 +8,7 @@ import com.deni.hilhamsyah.cookhub.ui.HomeScreen
 import com.deni.hilhamsyah.cookhub.ui.login_screen.LoginScreen
 import com.deni.hilhamsyah.cookhub.ui.onboarding_screen.OnboardingScreen
 import com.deni.hilhamsyah.cookhub.ui.onboarding_screen.SplashScreen
+import com.deni.hilhamsyah.cookhub.ui.register_screen.RegisterScreen
 
 @Composable
 fun NavGraph(
@@ -28,6 +29,9 @@ fun NavGraph(
         }
         composable(route = Screen.HomeScreen.route) {
             HomeScreen(navController = navHostController)
+        }
+        composable(route = Screen.RegisterScreen.route) {
+            RegisterScreen(navController = navHostController)
         }
 
     }
