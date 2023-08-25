@@ -1,10 +1,12 @@
 package com.deni.hilhamsyah.cookhub.ui.components
 
-import android.util.Patterns.EMAIL_ADDRESS
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
@@ -19,27 +21,29 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.deni.hilhamsyah.cookhub.R
 import com.deni.hilhamsyah.cookhub.ui.theme.CookhubTheme
+import com.deni.hilhamsyah.cookhub.use_case.InputValidator
 
 @Composable
-fun EditText(
+fun CustomTextField(
     modifier: Modifier = Modifier,
     value: String,
     onValueChange: (String) -> Unit,
     placeholder: String,
     enabled: Boolean = true,
     maxLines: Int = 1,
-    leadingIconId: Int? = null,
-    trailingIconId: Int? = null,
-    errorMessage: String? = null
+    leadingIcon: @Composable (() -> Unit)? = null,
+    trailingIcon: @Composable (() -> Unit)? = null,
+    errorMessage: String? = null,
+    isPassword: Boolean = false,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    keyboardActions: KeyboardActions = KeyboardActions.Default
 ) {
-    var leadingIcon: @Composable (() -> Unit)? = null
-    var trailingIcon: @Composable (() -> Unit)? = null
-
-    if(leadingIconId != null) leadingIcon = { CreateIcon(leadingIconId) }
-    if(trailingIconId != null) trailingIcon = { CreateIcon(trailingIconId) }
 
     Column(modifier = modifier) {
         OutlinedTextField(
@@ -49,6 +53,13 @@ fun EditText(
             enabled = enabled,
             shape = RoundedCornerShape(10.dp),
             placeholder = { Text(text = placeholder, color = Color(0xFFD9D9D9)) },
+            maxLines = maxLines,
+            leadingIcon = leadingIcon,
+            trailingIcon = trailingIcon,
+            isError = errorMessage != null,
+            keyboardOptions = keyboardOptions,
+            keyboardActions = keyboardActions,
+            visualTransformation = if (isPassword) PasswordVisualTransformation() else VisualTransformation.None,
             colors = OutlinedTextFieldDefaults.colors(
                 focusedBorderColor = Color(0xFFCB3838),
                 unfocusedBorderColor = Color(0xFFD9D9D9),
@@ -57,16 +68,9 @@ fun EditText(
                 focusedContainerColor = Color.White,
                 errorContainerColor = Color.White,
                 focusedTextColor = Color(0xFF303030),
-                unfocusedLeadingIconColor = Color(0xFFD9D9D9),
-                focusedLeadingIconColor = Color(0xFFD9D9D9),
-                unfocusedTrailingIconColor = Color(0xFFD9D9D9),
-                focusedTrailingIconColor = Color(0xFFD9D9D9),
-            ),
-            maxLines = maxLines,
-            leadingIcon = leadingIcon,
-            trailingIcon = trailingIcon,
-            isError = errorMessage != null,
+            )
         )
+
         if (errorMessage != null) Text(
             text = errorMessage,
             style = MaterialTheme.typography.labelSmall,
@@ -75,74 +79,50 @@ fun EditText(
     }
 }
 
-@Composable
-private fun CreateIcon(iconId: Int) {
-    Icon(
-        imageVector = ImageVector.vectorResource(id = iconId),
-        contentDescription = null
-    )
-}
-
-fun validateEmail(value: String): String? {
-    val errorMessage = "Invalid email format"
-    return if (value.isEmpty()) errorMessage
-    else if(!EMAIL_ADDRESS.matcher(value).matches()) errorMessage
-    else null
-}
-
-fun validatePassword(password: String): String? {
-    if (password.length < 8) {
-        return "Password must be at least 8 characters long"
-    }
-
-    if (!password.matches(".*[a-z].*".toRegex())) {
-        return "Password must contain at least one lowercase letter"
-    }
-
-    if (!password.matches(".*[A-Z].*".toRegex())) {
-        return "Password must contain at least one uppercase letter"
-    }
-
-    if (!password.matches(".*\\d.*".toRegex())) {
-        return "Password must contain at least one digit"
-    }
-
-    if (!password.matches(".*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>/?].*".toRegex())) {
-        return "Password must contain at least one special character"
-    }
-
-    return null
-}
-
 @Preview(showBackground = true, backgroundColor = 0xFFFFFFFF)
 @Composable
-fun EditTextPreview() {
+fun CustomTextFieldPreview() {
     CookhubTheme {
         var email by rememberSaveable { mutableStateOf("") }
         var password by rememberSaveable { mutableStateOf("") }
         var emailErrorMsg: String? by remember { mutableStateOf(null) }
         var passwordErrorMsg: String? by remember { mutableStateOf(null) }
+        var passwordVisibility by remember {
+            mutableStateOf(true)
+        }
+
+        val icon = if (passwordVisibility) ImageVector.vectorResource(R.drawable.ic_eye_open)
+        else ImageVector.vectorResource(R.drawable.ic_eye_closed)
 
         Column {
-            EditText(
+            CustomTextField(
                 modifier = Modifier.padding(top = 10.dp, start = 10.dp),
                 value = email,
                 onValueChange = {
                     email = it
-                    emailErrorMsg = validateEmail(it)
+                    emailErrorMsg = InputValidator.validateEmail(it)
                 },
                 placeholder = "Email",
                 errorMessage = emailErrorMsg
             )
-            EditText(
+            CustomTextField(
                 modifier = Modifier.padding(10.dp),
                 value = password,
                 onValueChange = {
                     password = it
-                    passwordErrorMsg = validatePassword(it)
+                    passwordErrorMsg = InputValidator.validatePassword(it)
                 },
                 placeholder = "Password",
-                errorMessage = passwordErrorMsg
+                errorMessage = passwordErrorMsg,
+                trailingIcon = {
+                    IconButton(onClick = { passwordVisibility = !passwordVisibility }) {
+                        Icon(
+                            imageVector = icon,
+                            contentDescription = "ic_arrow_right"
+                        )
+                    }
+                },
+                isPassword = passwordVisibility
             )
         }
     }
@@ -150,19 +130,19 @@ fun EditTextPreview() {
 
 @Preview(showBackground = true, backgroundColor = 0xFFFFFFFF)
 @Composable
-fun EditTextDisabledPreview() {
+fun CustomTextFieldDisabledPreview() {
     CookhubTheme {
         var email by rememberSaveable { mutableStateOf("") }
         var password by rememberSaveable { mutableStateOf("") }
         Column {
-            EditText(
+            CustomTextField(
                 modifier = Modifier.padding(10.dp),
                 value = password,
                 onValueChange = { password = it },
                 placeholder = "Email",
                 enabled = true,
             )
-            EditText(
+            CustomTextField(
                 modifier = Modifier.padding(10.dp),
                 value = email,
                 onValueChange = { email = it },
