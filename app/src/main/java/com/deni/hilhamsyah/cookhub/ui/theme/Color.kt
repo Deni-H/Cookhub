@@ -48,8 +48,11 @@ val secondary100 = Color(0xFF804E00)
 
 val rating = Color(0xFFFFB661)
 
-val rating0 = Color(0xFFFDE7EB)
-val rating100 = Color(0xFFEE1133)
+val error0 = Color(0xFFFDE7EB)
+val error100 = Color(0xFFEE1133)
 
 val success0 = Color(0xFFCEECD7)
 val success100 = Color(0xFF31B057)
+
+val tertiary90 = Color(0xFF8C2262)
+val tertiary30 = Color(0xFFF36CA7)

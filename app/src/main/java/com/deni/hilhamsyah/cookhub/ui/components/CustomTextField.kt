@@ -1,7 +1,9 @@
 package com.deni.hilhamsyah.cookhub.ui.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -12,7 +14,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -21,10 +22,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
@@ -55,10 +56,7 @@ fun CustomTextField(
         onValueChange = onValueChange,
         enabled = enabled,
         shape = RoundedCornerShape(10.dp),
-        placeholder = { Text(
-            text = placeholder,
-            color = Color(0xFFD9D9D9)
-        ) },
+        placeholder = { Text(text = placeholder) },
         maxLines = maxLines,
         leadingIcon = leadingIcon,
         trailingIcon = trailingIcon,
@@ -68,29 +66,22 @@ fun CustomTextField(
         singleLine = singleLine,
         visualTransformation =
             if (isPassword) PasswordVisualTransformation()
-            else VisualTransformation.None,
-        colors = OutlinedTextFieldDefaults.colors(
-            focusedBorderColor = Color(0xFFCB3838),
-            unfocusedBorderColor = Color(0xFFD9D9D9),
-            disabledContainerColor = Color(0xFFF1F1F1),
-            unfocusedContainerColor = Color.White,
-            focusedContainerColor = Color.White,
-            errorContainerColor = Color.White,
-            focusedTextColor = Color(0xFF303030),
-        )
+            else VisualTransformation.None
     )
+
+    Spacer(modifier = Modifier.height(8.dp))
 
     if (errorMessage != null) Text(
         text = errorMessage,
         style = MaterialTheme.typography.labelSmall,
-        color = Color(0xFFCB3838)
+        color = MaterialTheme.colorScheme.error
     )
 }
 
-@Preview(showBackground = true, backgroundColor = 0xFFFFFFFF)
+@Preview(showBackground = true)
 @Composable
 fun CustomTextFieldPreview() {
-    CookhubTheme {
+    CookhubTheme(darkTheme = true) {
         var email by rememberSaveable { mutableStateOf("") }
         var password by rememberSaveable { mutableStateOf("") }
         var emailErrorMsg: String? by remember { mutableStateOf(null) }
@@ -100,7 +91,10 @@ fun CustomTextFieldPreview() {
         val icon = if (passwordVisibility) ImageVector.vectorResource(R.drawable.ic_eye_open)
         else ImageVector.vectorResource(R.drawable.ic_eye_closed)
 
-        Column(modifier = Modifier.padding(8.dp)) {
+        Column(modifier = Modifier
+            .background(MaterialTheme.colorScheme.background)
+            .padding(8.dp)
+            .fillMaxSize()) {
             CustomTextField(
                 modifier = Modifier.fillMaxWidth(),
                 value = email,
@@ -126,12 +120,13 @@ fun CustomTextFieldPreview() {
                     IconButton(onClick = { passwordVisibility = !passwordVisibility }) {
                         Icon(
                             imageVector = icon,
-                            contentDescription = "ic_arrow_right"
+                            contentDescription = "ic_arrow_right",
+                            tint = MaterialTheme.colorScheme.primary
                         )
                     }
                 },
                 isPassword = passwordVisibility,
-                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done)
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done, keyboardType = KeyboardType.Password),
             )
         }
     }

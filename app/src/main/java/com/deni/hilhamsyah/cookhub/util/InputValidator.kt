@@ -4,13 +4,17 @@ import android.util.Patterns
 
 object InputValidator {
     fun validateEmail(value: String): String? {
-        val errorMessage = "Invalid email format"
-        return if (value.isEmpty()) errorMessage
-        else if(!Patterns.EMAIL_ADDRESS.matcher(value).matches()) errorMessage
+        return if (value.isEmpty()) "Email cannot be empty"
+        else if(!Patterns.EMAIL_ADDRESS.matcher(value).matches()) "Invalid email format"
         else null
     }
 
     fun validatePassword(password: String): String? {
+
+        if (password.isEmpty()) {
+            return "Password cannot be empty"
+        }
+
         if (password.length < 8) {
             return "Password must be at least 8 characters long"
         }

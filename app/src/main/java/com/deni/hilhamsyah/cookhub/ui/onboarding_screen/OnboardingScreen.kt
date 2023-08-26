@@ -137,7 +137,7 @@ fun OnboardingScreen(
                     shape = RoundedCornerShape(10.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF8C2262)),
                     onClick = {
-                              navController.navigate(Screen.RegisterScreen.route)
+                        navController.navigate(Screen.RegisterScreen.route)
                     },
                 ) {
                     Row (
