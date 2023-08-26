@@ -1,4 +1,4 @@
-package com.deni.hilhamsyah.cookhub.use_case
+package com.deni.hilhamsyah.cookhub.util
 
 import android.util.Patterns
 
