@@ -20,7 +20,7 @@ val neutral60 = Color(0xFF797979)
 val neutral70 = Color(0xFF606060)
 val neutral80 = Color(0xFF484848)
 val neutral90 = Color(0xFF303030)
-val neutral100 = Color(0xFF181818)
+val neutral100 = Color(0xFF1E232C)
 
 val primary0 = Color(0xFFFCECEC)
 val primary10 = Color(0xFFF9D8D8)
@@ -56,3 +56,5 @@ val success100 = Color(0xFF31B057)
 
 val tertiary90 = Color(0xFF8C2262)
 val tertiary30 = Color(0xFFF36CA7)
+
+val iconBorder = Color(0xFFE8ECF4)
