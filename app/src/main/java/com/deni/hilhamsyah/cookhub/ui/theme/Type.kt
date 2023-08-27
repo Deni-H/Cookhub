@@ -70,6 +70,8 @@ val Typography = Typography(
     bodyMedium = TextStyle(
         fontFamily = poppins,
         fontSize = 16.sp,
+        lineHeight = 22.4.sp,
+        fontWeight = FontWeight(600),
     ),
     bodySmall = TextStyle(
         fontFamily = poppins,

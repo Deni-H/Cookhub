@@ -6,7 +6,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -40,7 +39,7 @@ fun CustomAppBar(
             .fillMaxWidth()
             .background(MaterialTheme.colorScheme.surface)
     ) {
-        ConstraintLayout(modifier = Modifier.padding(8.dp)) {
+        ConstraintLayout {
             val (backButtonRef, titleRef, contentRef) = createRefs()
             if (!hideBackButton) {
                 IconButton(
