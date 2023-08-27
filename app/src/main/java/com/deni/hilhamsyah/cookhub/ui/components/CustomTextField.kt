@@ -21,6 +21,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
@@ -50,32 +51,35 @@ fun CustomTextField(
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default
 ) {
-    OutlinedTextField(
-        modifier = modifier,
-        value = value,
-        onValueChange = onValueChange,
-        enabled = enabled,
-        shape = RoundedCornerShape(10.dp),
-        placeholder = { Text(text = placeholder) },
-        maxLines = maxLines,
-        leadingIcon = leadingIcon,
-        trailingIcon = trailingIcon,
-        isError = errorMessage != null,
-        keyboardOptions = keyboardOptions,
-        keyboardActions = keyboardActions,
-        singleLine = singleLine,
-        visualTransformation =
+    Column(horizontalAlignment = Alignment.Start) {
+        OutlinedTextField(
+            modifier = modifier,
+            value = value,
+            onValueChange = onValueChange,
+            enabled = enabled,
+            shape = RoundedCornerShape(10.dp),
+            placeholder = { Text(text = placeholder) },
+            maxLines = maxLines,
+            leadingIcon = leadingIcon,
+            trailingIcon = trailingIcon,
+            isError = errorMessage != null,
+            keyboardOptions = keyboardOptions,
+            keyboardActions = keyboardActions,
+            singleLine = singleLine,
+            visualTransformation =
             if (isPassword) PasswordVisualTransformation()
             else VisualTransformation.None
-    )
+        )
 
-    Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
-    if (errorMessage != null) Text(
-        text = errorMessage,
-        style = MaterialTheme.typography.labelSmall,
-        color = MaterialTheme.colorScheme.error
-    )
+        if (errorMessage != null) Text(
+            modifier = Modifier.padding(bottom = 8.dp),
+            text = errorMessage,
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.error
+        )
+    }
 }
 
 @Preview(showBackground = true)
