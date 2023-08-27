@@ -39,11 +39,14 @@ import com.deni.hilhamsyah.cookhub.ui.components.CustomAppBar
 import com.deni.hilhamsyah.cookhub.ui.components.CustomTextField
 import com.deni.hilhamsyah.cookhub.ui.theme.CookhubTheme
 import com.deni.hilhamsyah.cookhub.util.InputValidator
+import com.deni.hilhamsyah.cookhub.util.rememberWindowInfo
 
 @Composable
 fun LoginScreen(
     navController: NavController
 ) {
+    val windowInfo = rememberWindowInfo()
+
     var email by rememberSaveable { mutableStateOf("") }
     var password by rememberSaveable { mutableStateOf("") }
 
