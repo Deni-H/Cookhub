@@ -29,9 +29,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -160,6 +165,9 @@ fun LoginScreen(
                 end.linkTo(parent.end)
             },
             text = AnnotatedString("Forgot password?"),
+            style = MaterialTheme.typography.labelSmall.copy(
+                color = MaterialTheme.colorScheme.primary
+            ),
             onClick = {}
         )
 
@@ -182,7 +190,8 @@ fun LoginScreen(
         ) {
             Text(
                 text = "Login",
-                style = MaterialTheme.typography.bodyMedium
+                style = MaterialTheme.typography.bodyMedium,
+                fontWeight = FontWeight.Medium
             )
         }
 
@@ -207,6 +216,9 @@ fun LoginScreen(
             Text(
                 modifier = Modifier.weight(1f),
                 text = "Or login with",
+                fontWeight = FontWeight(600),
+                color = Color(0xFF6A707C),
+                style = MaterialTheme.typography.bodyMedium,
                 textAlign = TextAlign.Center
             )
             Divider(
@@ -251,7 +263,12 @@ fun LoginScreen(
                 start.linkTo(parent.start)
                 end.linkTo(parent.end)
             },
-            text = "Don't have an account? Register now"
+            text = buildAnnotatedString {
+                append("Don't have an account?")
+                withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.primary)) {
+                    append(" Register now")
+                }
+            }
         )
 
         Text(
@@ -260,7 +277,22 @@ fun LoginScreen(
                 start.linkTo(parent.start)
                 end.linkTo(parent.end)
             },
-            text = "Read privacy and policy"
+            text = buildAnnotatedString {
+                append("Read")
+                withStyle(style = SpanStyle(
+                    color = MaterialTheme.colorScheme.primary,
+                    textDecoration = TextDecoration.Underline
+                )) {
+                    append(" privacy ")
+                }
+                append("and")
+                withStyle(style = SpanStyle(
+                    color = MaterialTheme.colorScheme.primary,
+                    textDecoration = TextDecoration.Underline
+                )) {
+                    append(" policy")
+                }
+            }
         )
     }
 }

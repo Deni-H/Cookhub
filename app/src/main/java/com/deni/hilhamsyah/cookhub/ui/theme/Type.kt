@@ -71,10 +71,12 @@ val Typography = Typography(
         fontFamily = poppins,
         fontSize = 16.sp,
         lineHeight = 22.4.sp,
-        fontWeight = FontWeight(600),
+        fontWeight = FontWeight(400),
     ),
     bodySmall = TextStyle(
         fontFamily = poppins,
+        fontSize = 12.sp,
+        fontWeight = FontWeight(500),
     ),
     labelLarge = TextStyle(
         fontFamily = poppins,

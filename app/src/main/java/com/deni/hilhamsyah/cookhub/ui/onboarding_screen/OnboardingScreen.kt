@@ -78,7 +78,6 @@ fun OnboardingScreen(
                         modifier = Modifier.height(23.dp),
                         text = "Premium recipes",
                         style = MaterialTheme.typography.bodyMedium,
-                        fontWeight = FontWeight.Light,
                         color = Color.White,
                         textAlign = TextAlign.Center
                     )
@@ -111,7 +110,6 @@ fun OnboardingScreen(
                     text = "Find best recipes for cooking",
                     style = MaterialTheme.typography.bodyMedium,
                     color = Color.White,
-                    fontWeight = FontWeight.Light,
                     textAlign = TextAlign.Center
                 )
                 Button(
