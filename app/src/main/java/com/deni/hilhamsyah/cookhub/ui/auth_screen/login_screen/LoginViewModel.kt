@@ -1,4 +1,4 @@
-package com.deni.hilhamsyah.cookhub.ui.login_screen
+package com.deni.hilhamsyah.cookhub.ui.auth_screen.login_screen
 
 import androidx.lifecycle.ViewModel
 import com.deni.hilhamsyah.cookhub.domain.repository.AuthRepository

@@ -5,8 +5,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.deni.hilhamsyah.cookhub.ui.forget_password.ForgetPasswordScreen
-import com.deni.hilhamsyah.cookhub.ui.home_screen.HomeScreen
-import com.deni.hilhamsyah.cookhub.ui.login_screen.LoginScreen
+import com.deni.hilhamsyah.cookhub.ui.auth_screen.home_screen.HomeScreen
+import com.deni.hilhamsyah.cookhub.ui.auth_screen.login_screen.LoginScreen
 import com.deni.hilhamsyah.cookhub.ui.onboarding_screen.OnboardingScreen
 import com.deni.hilhamsyah.cookhub.ui.onboarding_screen.SplashScreen
 import com.deni.hilhamsyah.cookhub.ui.register_screen.RegisterScreen

@@ -1,4 +1,4 @@
-package com.deni.hilhamsyah.cookhub.ui.login_screen
+package com.deni.hilhamsyah.cookhub.ui.auth_screen.login_screen
 
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
@@ -207,7 +207,9 @@ fun LoginScreen(
             style = MaterialTheme.typography.labelSmall.copy(
                 color = MaterialTheme.colorScheme.primary
             ),
-            onClick = {}
+            onClick = {
+                navController.navigate(Screen.ForgetPasswordScreen.route)
+            }
         )
 
         Button(
@@ -230,7 +232,11 @@ fun LoginScreen(
                     viewModel.loginWithEmailAndPassword(email, password)
                 }
             },
-            enabled = emailErrMsg == null && passErrMsg == null
+            enabled =
+                emailErrMsg == null &&
+                passErrMsg == null &&
+                email.isNotEmpty() &&
+                password.isNotEmpty()
         ) {
             Text(
                 text = "Login",

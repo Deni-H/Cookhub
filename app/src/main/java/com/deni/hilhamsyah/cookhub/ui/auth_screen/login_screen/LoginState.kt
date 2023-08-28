@@ -1,4 +1,4 @@
-package com.deni.hilhamsyah.cookhub.ui.login_screen
+package com.deni.hilhamsyah.cookhub.ui.auth_screen.login_screen
 
 data class LoginState(
     val isLoading: Boolean = false,
