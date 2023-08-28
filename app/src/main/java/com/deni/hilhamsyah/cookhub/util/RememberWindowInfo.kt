@@ -1,13 +1,11 @@
 package com.deni.hilhamsyah.cookhub.util
 
-import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalConfiguration
 
 @Composable
 fun rememberWindowInfo(): WindowInfo {
     val configuration = LocalConfiguration.current
-    Log.i("rememberWindowInfo: ", "${configuration.screenHeightDp}")
     return WindowInfo(
         width = when {
             configuration.screenWidthDp < 600 -> WindowType.COMPACT

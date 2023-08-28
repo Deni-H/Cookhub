@@ -1,6 +1,8 @@
 package com.deni.hilhamsyah.cookhub.ui.auth_screen.login_screen
 
 import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -52,26 +54,32 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.deni.hilhamsyah.cookhub.R
 import com.deni.hilhamsyah.cookhub.navigation.Screen
+import com.deni.hilhamsyah.cookhub.ui.auth_screen.AuthViewModel
 import com.deni.hilhamsyah.cookhub.ui.components.CustomAppBar
 import com.deni.hilhamsyah.cookhub.ui.components.CustomProgressDialog
 import com.deni.hilhamsyah.cookhub.ui.components.CustomTextField
 import com.deni.hilhamsyah.cookhub.ui.theme.CookhubTheme
 import com.deni.hilhamsyah.cookhub.ui.theme.poppins
+import com.deni.hilhamsyah.cookhub.util.Constant
 import com.deni.hilhamsyah.cookhub.util.InputValidator
 import com.deni.hilhamsyah.cookhub.util.WindowType
 import com.deni.hilhamsyah.cookhub.util.rememberWindowInfo
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
+import com.google.firebase.auth.GoogleAuthProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @Composable
 fun LoginScreen(
     navController: NavController,
-    viewModel: LoginViewModel = hiltViewModel()
+    authViewModel: AuthViewModel = hiltViewModel()
 ) {
     val windowInfo = rememberWindowInfo()
     val coroutineScope = rememberCoroutineScope()
 
-    val loginState = viewModel.loginState.collectAsState(initial = null)
+    val loginState = authViewModel.loginState.collectAsState(initial = null)
     val context = LocalContext.current
 
     var email by rememberSaveable { mutableStateOf("") }
@@ -84,6 +92,21 @@ fun LoginScreen(
         if (passwordVisibility) ImageVector.vectorResource(R.drawable.ic_eye_open)
         else ImageVector.vectorResource(R.drawable.ic_eye_closed)
 
+    val launcher =
+        rememberLauncherForActivityResult(contract = ActivityResultContracts.StartActivityForResult()) {
+            val account = GoogleSignIn.getSignedInAccountFromIntent(it.data)
+            try {
+                val result = account.getResult(ApiException::class.java)
+                val credentials = GoogleAuthProvider.getCredential(result.idToken!!, null)
+                coroutineScope.launch {
+                    println("Executed")
+                    authViewModel.signInWithCredentials(credentials)
+                }
+            } catch (it: ApiException) {
+                println("Error: ${it.message}")
+                println(it)
+            }
+        }
 
     if (loginState.value?.isLoading == true) {
         CustomProgressDialog()
@@ -229,7 +252,7 @@ fun LoginScreen(
             shape = RoundedCornerShape(10.dp),
             onClick = {
                 coroutineScope.launch(Dispatchers.Main) {
-                    viewModel.loginWithEmailAndPassword(email, password)
+                    authViewModel.loginWithEmailAndPassword(email, password)
                 }
             },
             enabled =
@@ -294,7 +317,15 @@ fun LoginScreen(
                 .fillMaxWidth(),
             shape = RoundedCornerShape(10.dp),
             border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
-            onClick = { /*TODO*/ },
+            onClick = {
+                val gso = GoogleSignInOptions
+                    .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                    .requestIdToken(Constant.WEB_CLIENT_ID)
+                    .requestEmail()
+                    .build()
+                val googleSignInClient = GoogleSignIn.getClient(context, gso)
+                launcher.launch(googleSignInClient.signInIntent)
+            },
             colors = ButtonDefaults.buttonColors(
                 containerColor = MaterialTheme.colorScheme.surface,
             )
