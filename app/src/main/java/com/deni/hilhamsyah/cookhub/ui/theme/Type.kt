@@ -9,7 +9,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.deni.hilhamsyah.cookhub.R
 
-private val poppins = FontFamily(
+val poppins = FontFamily(
     Font(R.font.poppins_thin, FontWeight(100)),
     Font(R.font.poppins_light, FontWeight(200)),
     Font(R.font.poppins_extra_light, FontWeight(300)),

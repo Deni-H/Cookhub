@@ -15,7 +15,7 @@ object InputValidator {
             return "Password cannot be empty"
         }
 
-        if (password.length < 8) {
+        if (password.length < 6) {
             return "Password must be at least 8 characters long"
         }
 

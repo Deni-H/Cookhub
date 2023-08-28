@@ -14,7 +14,6 @@ import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -36,6 +35,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -46,8 +46,6 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
-import androidx.compose.ui.window.DialogProperties
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
@@ -55,14 +53,15 @@ import androidx.navigation.compose.rememberNavController
 import com.deni.hilhamsyah.cookhub.R
 import com.deni.hilhamsyah.cookhub.navigation.Screen
 import com.deni.hilhamsyah.cookhub.ui.components.CustomAppBar
+import com.deni.hilhamsyah.cookhub.ui.components.CustomProgressDialog
 import com.deni.hilhamsyah.cookhub.ui.components.CustomTextField
 import com.deni.hilhamsyah.cookhub.ui.theme.CookhubTheme
+import com.deni.hilhamsyah.cookhub.ui.theme.poppins
 import com.deni.hilhamsyah.cookhub.util.InputValidator
 import com.deni.hilhamsyah.cookhub.util.WindowType
 import com.deni.hilhamsyah.cookhub.util.rememberWindowInfo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlin.math.log
 
 @Composable
 fun LoginScreen(
@@ -85,22 +84,15 @@ fun LoginScreen(
         if (passwordVisibility) ImageVector.vectorResource(R.drawable.ic_eye_open)
         else ImageVector.vectorResource(R.drawable.ic_eye_closed)
 
-    
+
     if (loginState.value?.isLoading == true) {
-        Dialog(
-            onDismissRequest = {},
-            properties = DialogProperties(
-                dismissOnBackPress = false,
-                dismissOnClickOutside = false
-            )
-        ) {
-            CircularProgressIndicator()
-        }
+        CustomProgressDialog()
     }
 
     LaunchedEffect(key1 = loginState.value?.success) {
         if(loginState.value?.success != null) {
             Toast.makeText(context, loginState.value?.success, Toast.LENGTH_LONG).show()
+            navController.popBackStack()
             navController.navigate(Screen.HomeScreen.route)
         }
     }
@@ -130,7 +122,7 @@ fun LoginScreen(
             loginBtnRef,
             googleBtnRef,
             dividerRef,
-            registerTextRef,
+            registerContainerRef,
             footerRef
         ) = createRefs()
 
@@ -237,7 +229,8 @@ fun LoginScreen(
                 coroutineScope.launch(Dispatchers.Main) {
                     viewModel.loginWithEmailAndPassword(email, password)
                 }
-            }
+            },
+            enabled = emailErrMsg == null && passErrMsg == null
         ) {
             Text(
                 text = "Login",
@@ -307,20 +300,27 @@ fun LoginScreen(
             )
         }
         
-        Text(
-            modifier = Modifier.constrainAs(registerTextRef) {
+        Row(
+            modifier = Modifier.constrainAs(registerContainerRef) {
                 top.linkTo(googleBtnRef.bottom)
                 bottom.linkTo(parent.bottom)
                 start.linkTo(parent.start)
                 end.linkTo(parent.end)
-            },
-            text = buildAnnotatedString {
-                append("Don't have an account?")
-                withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.primary)) {
-                    append(" Register now")
-                }
             }
-        )
+        ) {
+            Text(text = "Don't have an account? ")
+            ClickableText(
+                text = AnnotatedString("Register now"),
+                style = TextStyle(
+                    color = MaterialTheme.colorScheme.primary,
+                    fontFamily = poppins,
+                    fontWeight = FontWeight.Medium
+                ),
+                onClick = {
+                    navController.navigate(Screen.RegisterScreen.route)
+                }
+            )
+        }
 
         Text(
             modifier = Modifier.constrainAs(footerRef) {
