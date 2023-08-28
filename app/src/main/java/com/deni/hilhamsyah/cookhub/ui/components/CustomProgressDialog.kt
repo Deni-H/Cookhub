@@ -42,9 +42,7 @@ fun CustomProgressDialog() {
 @Composable
 fun CustomDialogPreview() {
     CookhubTheme {
-
         var showDialog by remember { mutableStateOf(false) }
-
         Column(
             modifier = Modifier
                 .fillMaxSize()

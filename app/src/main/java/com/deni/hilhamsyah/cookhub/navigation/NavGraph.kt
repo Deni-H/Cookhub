@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.deni.hilhamsyah.cookhub.ui.forget_password.ForgetPasswordScreen
 import com.deni.hilhamsyah.cookhub.ui.home_screen.HomeScreen
 import com.deni.hilhamsyah.cookhub.ui.login_screen.LoginScreen
 import com.deni.hilhamsyah.cookhub.ui.onboarding_screen.OnboardingScreen
@@ -32,6 +33,9 @@ fun NavGraph(
         }
         composable(route = Screen.RegisterScreen.route) {
             RegisterScreen(navController = navHostController)
+        }
+         composable(route = Screen.ForgetPasswordScreen.route) {
+            ForgetPasswordScreen(navController = navHostController)
         }
 
     }

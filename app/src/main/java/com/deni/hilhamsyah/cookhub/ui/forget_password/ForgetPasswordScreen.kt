@@ -1,4 +1,4 @@
-package com.deni.hilhamsyah.cookhub.ui.register_screen
+package com.deni.hilhamsyah.cookhub.ui.forget_password
 
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -6,9 +6,9 @@ import androidx.navigation.NavController
 import com.deni.hilhamsyah.cookhub.ui.components.CustomAppBar
 
 @Composable
-fun RegisterScreen(
+fun ForgetPasswordScreen(
     navController: NavController
 ) {
     CustomAppBar(navController = navController)
-    Text(text = "Register Screen")
+    Text(text = "Forget Password Screen")
 }
