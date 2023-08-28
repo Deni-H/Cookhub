@@ -1,5 +1,6 @@
 package com.deni.hilhamsyah.cookhub.ui.login_screen
 
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -13,20 +14,25 @@ import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
@@ -40,22 +46,34 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.deni.hilhamsyah.cookhub.R
+import com.deni.hilhamsyah.cookhub.navigation.Screen
 import com.deni.hilhamsyah.cookhub.ui.components.CustomAppBar
 import com.deni.hilhamsyah.cookhub.ui.components.CustomTextField
 import com.deni.hilhamsyah.cookhub.ui.theme.CookhubTheme
 import com.deni.hilhamsyah.cookhub.util.InputValidator
 import com.deni.hilhamsyah.cookhub.util.WindowType
 import com.deni.hilhamsyah.cookhub.util.rememberWindowInfo
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlin.math.log
 
 @Composable
 fun LoginScreen(
-    navController: NavController
+    navController: NavController,
+    viewModel: LoginViewModel = hiltViewModel()
 ) {
     val windowInfo = rememberWindowInfo()
+    val coroutineScope = rememberCoroutineScope()
+
+    val loginState = viewModel.loginState.collectAsState(initial = null)
+    val context = LocalContext.current
 
     var email by rememberSaveable { mutableStateOf("") }
     var password by rememberSaveable { mutableStateOf("") }
@@ -66,6 +84,32 @@ fun LoginScreen(
     val icon =
         if (passwordVisibility) ImageVector.vectorResource(R.drawable.ic_eye_open)
         else ImageVector.vectorResource(R.drawable.ic_eye_closed)
+
+    
+    if (loginState.value?.isLoading == true) {
+        Dialog(
+            onDismissRequest = {},
+            properties = DialogProperties(
+                dismissOnBackPress = false,
+                dismissOnClickOutside = false
+            )
+        ) {
+            CircularProgressIndicator()
+        }
+    }
+
+    LaunchedEffect(key1 = loginState.value?.success) {
+        if(loginState.value?.success != null) {
+            Toast.makeText(context, loginState.value?.success, Toast.LENGTH_LONG).show()
+            navController.navigate(Screen.HomeScreen.route)
+        }
+    }
+
+    LaunchedEffect(key1 = loginState.value?.fail) {
+        if (loginState.value?.fail != null) {
+            Toast.makeText(context, loginState.value?.fail, Toast.LENGTH_LONG).show()
+        }
+    }
 
     ConstraintLayout(
         modifier = Modifier
@@ -155,7 +199,10 @@ fun LoginScreen(
                     }
                 },
                 isPassword = passwordVisibility,
-                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done, keyboardType = KeyboardType.Password),
+                keyboardOptions = KeyboardOptions(
+                    imeAction = ImeAction.Done,
+                    keyboardType = KeyboardType.Password
+                ),
             )
         }
 
@@ -186,7 +233,11 @@ fun LoginScreen(
                 .height(50.dp)
                 .fillMaxWidth(),
             shape = RoundedCornerShape(10.dp),
-            onClick = { /*TODO*/ }
+            onClick = {
+                coroutineScope.launch(Dispatchers.Main) {
+                    viewModel.loginWithEmailAndPassword(email, password)
+                }
+            }
         ) {
             Text(
                 text = "Login",
