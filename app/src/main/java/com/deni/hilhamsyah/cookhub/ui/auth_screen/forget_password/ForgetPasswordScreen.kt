@@ -48,7 +48,7 @@ fun ForgetPasswordScreen(
     authViewModel: AuthViewModel = hiltViewModel()
 ) {
 
-    val resetPassState = authViewModel.resetPassState.collectAsState(initial = null)
+    val authState = authViewModel.authState.collectAsState(initial = null)
     val coroutine = rememberCoroutineScope()
     val context = LocalContext.current
 
@@ -56,19 +56,19 @@ fun ForgetPasswordScreen(
     var emailErrMsg: String? by rememberSaveable { mutableStateOf(null) }
 
 
-    if (resetPassState.value?.isLoading == true) {
+    if (authState.value?.isLoading == true) {
         CustomProgressDialog()
     }
 
-    LaunchedEffect(key1 = resetPassState.value?.success) {
-        if(resetPassState.value?.success != null) {
+    LaunchedEffect(key1 = authState.value?.success) {
+        if(authState.value?.success != null) {
             navController.popBackStack()
             navController.navigate(Screen.ForgetPasswordSuccessScreen.route)
         }
     }
 
-    LaunchedEffect(key1 = resetPassState.value?.fail) {
-        if (resetPassState.value?.fail != null) {
+    LaunchedEffect(key1 = authState.value?.fail) {
+        if (authState.value?.fail != null) {
             Toast.makeText(context, "Fail reset password!", Toast.LENGTH_LONG).show()
         }
     }

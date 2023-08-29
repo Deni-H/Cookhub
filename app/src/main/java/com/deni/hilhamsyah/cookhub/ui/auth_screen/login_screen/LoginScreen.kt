@@ -79,7 +79,7 @@ fun LoginScreen(
     val windowInfo = rememberWindowInfo()
     val coroutineScope = rememberCoroutineScope()
 
-    val loginState = authViewModel.loginState.collectAsState(initial = null)
+    val authState = authViewModel.authState.collectAsState(initial = null)
     val context = LocalContext.current
 
     var email by rememberSaveable { mutableStateOf("") }
@@ -108,13 +108,13 @@ fun LoginScreen(
             }
         }
 
-    if (loginState.value?.isLoading == true) {
+    if (authState.value?.isLoading == true) {
         CustomProgressDialog()
     }
 
-    LaunchedEffect(key1 = loginState.value?.success) {
-        if(loginState.value?.success != null) {
-            Toast.makeText(context, loginState.value?.success, Toast.LENGTH_LONG).show()
+    LaunchedEffect(key1 = authState.value?.success) {
+        if(authState.value?.success != null) {
+            Toast.makeText(context, authState.value?.success, Toast.LENGTH_LONG).show()
             navController.popBackStack()
             navController.navigate(Screen.HomeScreen.route) {
                 popUpTo(Screen.OnboardingScreen.route) {
@@ -124,9 +124,9 @@ fun LoginScreen(
         }
     }
 
-    LaunchedEffect(key1 = loginState.value?.fail) {
-        if (loginState.value?.fail != null) {
-            Toast.makeText(context, loginState.value?.fail, Toast.LENGTH_LONG).show()
+    LaunchedEffect(key1 = authState.value?.fail) {
+        if (authState.value?.fail != null) {
+            Toast.makeText(context, authState.value?.fail, Toast.LENGTH_LONG).show()
         }
     }
 
@@ -340,7 +340,7 @@ fun LoginScreen(
                 tint = Color.Unspecified
             )
         }
-        
+
         Row(
             modifier = Modifier.constrainAs(registerContainerRef) {
                 top.linkTo(googleBtnRef.bottom)

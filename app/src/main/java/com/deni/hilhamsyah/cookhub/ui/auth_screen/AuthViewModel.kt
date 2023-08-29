@@ -14,23 +14,36 @@ class AuthViewModel @Inject constructor(
     private val authRepository: AuthRepository
 ) : ViewModel() {
 
-    private val _loginState = Channel<AuthState>()
-    val loginState = _loginState.receiveAsFlow()
-
-    private val _resetPassState = Channel<AuthState>()
-    val resetPassState = _resetPassState.receiveAsFlow()
+    private val _authState = Channel<AuthState>()
+    val authState = _authState.receiveAsFlow()
 
     suspend fun loginWithEmailAndPassword(email: String, password: String) {
         authRepository.loginWithEmailAndPassword(email, password).collect { result ->
             when(result) {
                 is Resource.Loading -> {
-                    _loginState.send(AuthState(isLoading = true))
+                    _authState.send(AuthState(isLoading = true))
                 }
                 is Resource.Success -> {
-                    _loginState.send(AuthState(success = "Login success!"))
+                    _authState.send(AuthState(success = "Login success!"))
                 }
                 is Resource.Error -> {
-                    _loginState.send(AuthState(fail = "Invalid email or password"))
+                    _authState.send(AuthState(fail = "Invalid email or password"))
+                }
+            }
+        }
+    }
+
+    suspend fun registerWithEmailAndPassword(email: String, password: String) {
+        authRepository.registerWithEmailAndPassword(email, password).collect { result ->
+            when(result) {
+                is Resource.Loading -> {
+                    _authState.send(AuthState(isLoading = true))
+                }
+                is Resource.Success -> {
+                    _authState.send(AuthState(success = "Register success!"))
+                }
+                is Resource.Error -> {
+                    _authState.send(AuthState(fail = "An error occurred"))
                 }
             }
         }
@@ -40,13 +53,13 @@ class AuthViewModel @Inject constructor(
         authRepository.loginWithCredentials(credentials = credential).collect { result ->
             when(result) {
                 is Resource.Loading -> {
-                    _loginState.send(AuthState(isLoading = true))
+                    _authState.send(AuthState(isLoading = true))
                 }
                 is Resource.Success -> {
-                    _loginState.send(AuthState(success = "Login success!"))
+                    _authState.send(AuthState(success = "Login success!"))
                 }
                 is Resource.Error -> {
-                    _loginState.send(AuthState(fail = "Login failed"))
+                    _authState.send(AuthState(fail = "Login failed"))
                 }
             }
         }
@@ -56,13 +69,13 @@ class AuthViewModel @Inject constructor(
         authRepository.resetPassword(email).collect { result ->
             when(result) {
                 is Resource.Loading -> {
-                    _resetPassState.send(AuthState(isLoading = true))
+                    _authState.send(AuthState(isLoading = true))
                 }
                 is Resource.Success -> {
-                    _resetPassState.send(AuthState(success = "Reset password email sent!"))
+                    _authState.send(AuthState(success = "Reset password email sent!"))
                 }
                 is Resource.Error -> {
-                    _resetPassState.send(AuthState(fail = "Reset password failed"))
+                    _authState.send(AuthState(fail = "Reset password failed"))
                 }
             }
         }
