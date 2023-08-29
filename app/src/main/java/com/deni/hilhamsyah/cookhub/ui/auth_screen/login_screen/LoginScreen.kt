@@ -116,7 +116,11 @@ fun LoginScreen(
         if(loginState.value?.success != null) {
             Toast.makeText(context, loginState.value?.success, Toast.LENGTH_LONG).show()
             navController.popBackStack()
-            navController.navigate(Screen.HomeScreen.route)
+            navController.navigate(Screen.HomeScreen.route) {
+                popUpTo(Screen.OnboardingScreen.route) {
+                    inclusive = true
+                }
+            }
         }
     }
 

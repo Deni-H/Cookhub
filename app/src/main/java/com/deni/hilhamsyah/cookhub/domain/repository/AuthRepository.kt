@@ -18,7 +18,7 @@ interface AuthRepository {
 
     fun getIdToken(forceRefresh: Boolean): Flow<Resource<String>>
 
-    suspend fun resetPassword(email: String)
+    suspend fun resetPassword(email: String): Flow<Resource<Int>>
 
     fun logout()
 }

@@ -1,4 +1,4 @@
-package com.deni.hilhamsyah.cookhub.ui.register_screen
+package com.deni.hilhamsyah.cookhub.ui.auth_screen.register_screen
 
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable

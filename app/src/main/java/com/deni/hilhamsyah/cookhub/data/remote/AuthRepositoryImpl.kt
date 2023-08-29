@@ -9,7 +9,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.tasks.await
-import javax.inject.Inject
 
 class AuthRepositoryImpl (
     private val firebaseAuth: FirebaseAuth
@@ -38,7 +37,7 @@ class AuthRepositoryImpl (
         return flow {
             emit(Resource.Loading())
             val result = firebaseAuth.createUserWithEmailAndPassword(email, password).await()
-            result.user?.sendEmailVerification()
+            result.user?.sendEmailVerification()?.await()
             emit(Resource.Success(SUCCESS))
         }.catch {
             emit(Resource.Error(it))
@@ -64,8 +63,14 @@ class AuthRepositoryImpl (
         }
     }
 
-    override suspend fun resetPassword(email: String) {
-        firebaseAuth.sendPasswordResetEmail(email).await()
+    override suspend fun resetPassword(email: String): Flow<Resource<Int>> {
+        return flow {
+            emit(Resource.Loading())
+            firebaseAuth.sendPasswordResetEmail(email).await()
+            emit(Resource.Success(SUCCESS))
+        }.catch {
+            emit(Resource.Error(it))
+        }
     }
 
     override fun logout() {
