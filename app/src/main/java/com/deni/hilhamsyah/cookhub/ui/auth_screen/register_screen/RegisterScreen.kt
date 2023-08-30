@@ -94,7 +94,7 @@ fun RegisterScreen(
                 val result = account.getResult(ApiException::class.java)
                 val credentials = GoogleAuthProvider.getCredential(result.idToken!!, null)
                 coroutineScope.launch {
-                    authViewModel.signInWithCredentials(credentials)
+                    authViewModel.loginWithCredentials(credentials)
                 }
             } catch (it: ApiException) {
                 println("Error: ${it.message}")
@@ -108,7 +108,7 @@ fun RegisterScreen(
 
     LaunchedEffect(key1 = authState.value?.success) {
         if(authState.value?.success != null) {
-            Toast.makeText(context, authState.value?.success, Toast.LENGTH_LONG).show()
+            Toast.makeText(context, "Auth success", Toast.LENGTH_LONG).show()
             navController.popBackStack()
             navController.navigate(Screen.HomeScreen.route) {
                 popUpTo(Screen.OnboardingScreen.route) {
@@ -346,7 +346,7 @@ fun RegisterScreen(
                 ) {
                     append(stringResource(R.string.privacy))
                 }
-                append("and")
+                append(stringResource(R.string.and))
                 withStyle(style = SpanStyle(
                     color = MaterialTheme.colorScheme.primary,
                     textDecoration = TextDecoration.Underline

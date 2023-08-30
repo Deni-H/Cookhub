@@ -34,6 +34,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
@@ -66,8 +67,6 @@ import com.deni.hilhamsyah.cookhub.util.WindowType
 import com.deni.hilhamsyah.cookhub.util.rememberWindowInfo
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.common.api.ApiException
-import com.google.firebase.auth.GoogleAuthProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -93,18 +92,11 @@ fun LoginScreen(
         else ImageVector.vectorResource(R.drawable.ic_eye_closed)
 
     val launcher =
-        rememberLauncherForActivityResult(contract = ActivityResultContracts.StartActivityForResult()) {
-            val account = GoogleSignIn.getSignedInAccountFromIntent(it.data)
-            try {
-                val result = account.getResult(ApiException::class.java)
-                val credentials = GoogleAuthProvider.getCredential(result.idToken!!, null)
-                coroutineScope.launch {
-                    println("Executed")
-                    authViewModel.signInWithCredentials(credentials)
-                }
-            } catch (it: ApiException) {
-                println("Error: ${it.message}")
-                println(it)
+        rememberLauncherForActivityResult(
+            contract = ActivityResultContracts.StartActivityForResult()
+        ) {
+            coroutineScope.launch {
+                authViewModel.handleActivityResult(it)
             }
         }
 
@@ -114,7 +106,7 @@ fun LoginScreen(
 
     LaunchedEffect(key1 = authState.value?.success) {
         if(authState.value?.success != null) {
-            Toast.makeText(context, authState.value?.success, Toast.LENGTH_LONG).show()
+            Toast.makeText(context, context.getString(R.string.login_success), Toast.LENGTH_LONG).show()
             navController.popBackStack()
             navController.navigate(Screen.HomeScreen.route) {
                 popUpTo(Screen.OnboardingScreen.route) {
@@ -160,7 +152,7 @@ fun LoginScreen(
                 end.linkTo(parent.end)
             },
             navController = navController,
-            title = "Hi, Welcome back!",
+            title = stringResource(R.string.welcome_back),
         )
 
         Text(
@@ -168,7 +160,7 @@ fun LoginScreen(
                 top.linkTo(topBarRef.bottom, 20.dp)
                 start.linkTo(parent.start)
             },
-            text = "Access your Cookhub account \nand explore delightful recipes!"
+            text = stringResource(R.string.login_sub_title)
         )
 
         Column(
@@ -191,7 +183,7 @@ fun LoginScreen(
                     email = it
                     emailErrMsg = InputValidator.validateEmail(it)
                 },
-                placeholder = "Email",
+                placeholder = stringResource(R.string.email_placeholder),
                 errorMessage = emailErrMsg,
                 keyboardOptions = KeyboardOptions(
                     imeAction = ImeAction.Next,
@@ -206,13 +198,13 @@ fun LoginScreen(
                     password = it
                     passErrMsg = InputValidator.validatePassword(it)
                 },
-                placeholder = "Password",
+                placeholder = stringResource(R.string.password_placeholder),
                 errorMessage = passErrMsg,
                 trailingIcon = {
                     IconButton(onClick = { passwordVisibility = !passwordVisibility }) {
                         Icon(
                             imageVector = icon,
-                            contentDescription = "ic_eye",
+                            contentDescription = "icon_eye",
                             tint = MaterialTheme.colorScheme.primary
                         )
                     }
@@ -230,7 +222,7 @@ fun LoginScreen(
                 top.linkTo(inputContainerRef.bottom)
                 end.linkTo(parent.end)
             },
-            text = AnnotatedString("Forgot password?"),
+            text = AnnotatedString(stringResource(R.string.forgot_password)),
             style = MaterialTheme.typography.labelSmall.copy(
                 color = MaterialTheme.colorScheme.primary
             ),
@@ -266,7 +258,7 @@ fun LoginScreen(
                 password.isNotEmpty()
         ) {
             Text(
-                text = "Login",
+                text = stringResource(R.string.login),
                 style = MaterialTheme.typography.bodyMedium,
                 fontWeight = FontWeight.Medium
             )
@@ -292,7 +284,7 @@ fun LoginScreen(
             )
             Text(
                 modifier = Modifier.weight(1f),
-                text = "Or login with",
+                text = stringResource(R.string.or_login_with),
                 fontWeight = FontWeight(600),
                 color = Color(0xFF6A707C),
                 style = MaterialTheme.typography.bodyMedium,
@@ -336,7 +328,7 @@ fun LoginScreen(
         ) {
             Icon(
                 imageVector = ImageVector.vectorResource(R.drawable.ic_google),
-                contentDescription = "null",
+                contentDescription = "google_icon",
                 tint = Color.Unspecified
             )
         }
@@ -349,9 +341,9 @@ fun LoginScreen(
                 end.linkTo(parent.end)
             }
         ) {
-            Text(text = "Don't have an account? ")
+            Text(text = stringResource(R.string.don_t_have_an_account))
             ClickableText(
-                text = AnnotatedString("Register now"),
+                text = AnnotatedString(stringResource(R.string.register_now)),
                 style = TextStyle(
                     color = MaterialTheme.colorScheme.primary,
                     fontFamily = poppins,
@@ -370,19 +362,19 @@ fun LoginScreen(
                 end.linkTo(parent.end)
             },
             text = buildAnnotatedString {
-                append("Read")
+                append(stringResource(R.string.read))
                 withStyle(style = SpanStyle(
                     color = MaterialTheme.colorScheme.primary,
                     textDecoration = TextDecoration.Underline
                 )) {
-                    append(" privacy ")
+                    append(stringResource(R.string.privacy))
                 }
-                append("and")
+                append(stringResource(R.string.and))
                 withStyle(style = SpanStyle(
                     color = MaterialTheme.colorScheme.primary,
                     textDecoration = TextDecoration.Underline
                 )) {
-                    append(" policy")
+                    append(stringResource(R.string.policy))
                 }
             }
         )

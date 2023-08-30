@@ -12,4 +12,12 @@
     <string name="privacy">" privacy "</string>
     <string name="policy">" policy"</string>
     <string name="email_placeholder">Email</string>
+    <string name="welcome_back">Hi, Welcome back!</string>
+    <string name="login_sub_title">Access your Cookhub account \nand explore delightful recipes!</string>
+    <string name="forgot_password">Forgot password?</string>
+    <string name="login">Login</string>
+    <string name="don_t_have_an_account">"Don't have an account? "</string>
+    <string name="register_now">Register now</string>
+    <string name="and">and</string>
+    <string name="login_success">Login success</string>
 </resources>
