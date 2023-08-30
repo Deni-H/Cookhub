@@ -70,8 +70,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun LoginScreen(
     navController: NavController,
-    authViewModel: AuthViewModel = hiltViewModel(),
-    loginViewModel: LoginViewModel = hiltViewModel()
+    authViewModel: AuthViewModel = hiltViewModel()
 ) {
     val windowInfo = rememberWindowInfo()
     val coroutineScope = rememberCoroutineScope()
@@ -309,7 +308,7 @@ fun LoginScreen(
                 .fillMaxWidth(),
             shape = RoundedCornerShape(10.dp),
             border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
-            onClick = { loginViewModel.googleLoginOnClick(context, launcher) },
+            onClick = { authViewModel.googleLoginOnClick(context, launcher) },
             colors = ButtonDefaults.buttonColors(
                 containerColor = MaterialTheme.colorScheme.surface,
             )

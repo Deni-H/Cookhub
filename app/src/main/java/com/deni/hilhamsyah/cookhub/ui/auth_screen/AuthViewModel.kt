@@ -1,11 +1,16 @@
 package com.deni.hilhamsyah.cookhub.ui.auth_screen
 
+import android.content.Context
+import android.content.Intent
 import android.util.Log
+import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.result.ActivityResult
 import androidx.lifecycle.ViewModel
 import com.deni.hilhamsyah.cookhub.domain.repository.AuthRepository
+import com.deni.hilhamsyah.cookhub.util.Constant
 import com.deni.hilhamsyah.cookhub.util.Resource
 import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.GoogleAuthProvider
@@ -69,6 +74,16 @@ class AuthViewModel @Inject constructor(
         } catch (it: ApiException) {
             Log.e(TAG, "${it.message}")
         }
+    }
+
+    fun googleLoginOnClick(context: Context, launcher: ManagedActivityResultLauncher<Intent, ActivityResult>) {
+        val gso = GoogleSignInOptions
+            .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(Constant.WEB_CLIENT_ID)
+            .requestEmail()
+            .build()
+        val googleSignInClient = GoogleSignIn.getClient(context, gso)
+        launcher.launch(googleSignInClient.signInIntent)
     }
 
     companion object {
