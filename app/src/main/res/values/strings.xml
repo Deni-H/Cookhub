@@ -1,4 +1,15 @@
 <resources>
     <string name="app_name">Cookhub</string>
     <string name="web_client_id">1084746143915-rbl5htv6urpdojolf6bqti11hsksdrfd.apps.googleusercontent.com</string>
+    <string name="create_new_account">Create new account</string>
+    <string name="register_sub_title">Get started with a new account and unlock a world of delicious recipes and culinary inspiration!</string>
+    <string name="password_placeholder">Password</string>
+    <string name="password_doesn_t_match">Password doesn\'t match</string>
+    <string name="confirm_password_placeholder">Confirm password</string>
+    <string name="register">Register</string>
+    <string name="or_login_with">Or login with</string>
+    <string name="read">Read</string>
+    <string name="privacy">" privacy "</string>
+    <string name="policy">" policy"</string>
+    <string name="email_placeholder">Email</string>
 </resources>

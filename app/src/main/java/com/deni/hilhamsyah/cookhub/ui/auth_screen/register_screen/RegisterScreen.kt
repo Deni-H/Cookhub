@@ -33,6 +33,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -148,7 +149,7 @@ fun RegisterScreen(
                     end.linkTo(parent.end)
                 },
             navController = navController,
-            title = "Create new account"
+            title = stringResource(R.string.create_new_account)
         )
         Text(
             modifier = Modifier
@@ -157,7 +158,7 @@ fun RegisterScreen(
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
                 },
-            text = "Get started with a new account and unlock a world of delicious recipes and culinary inspiration!",
+            text = stringResource(R.string.register_sub_title),
             color = neutral50
         )
 
@@ -179,7 +180,7 @@ fun RegisterScreen(
                     email = it
                     emailErrMsg = InputValidator.validateEmail(it)
                 },
-                placeholder = "Email",
+                placeholder = stringResource(R.string.email_placeholder),
                 errorMessage = emailErrMsg,
                 keyboardOptions = KeyboardOptions(
                     imeAction = ImeAction.Next,
@@ -194,13 +195,13 @@ fun RegisterScreen(
                     password = it
                     passErrMsg = InputValidator.validatePassword(it)
                 },
-                placeholder = "Password",
+                placeholder = stringResource(R.string.password_placeholder),
                 errorMessage = passErrMsg,
                 trailingIcon = {
                     IconButton(onClick = { passwordVisibility = !passwordVisibility }) {
                         Icon(
                             imageVector = icon,
-                            contentDescription = "ic_eye",
+                            contentDescription = "icon_eye",
                             tint = MaterialTheme.colorScheme.primary
                         )
                     }
@@ -217,9 +218,12 @@ fun RegisterScreen(
                 value = confirmPassword,
                 onValueChange = {
                     confirmPassword = it
-                    confirmPassErrMsg = if (confirmPassword != password) "Password doesn't match" else null
+                    confirmPassErrMsg =
+                        if (confirmPassword != password) {
+                            context.getString(R.string.password_doesn_t_match)
+                        } else null
                 },
-                placeholder = "Confirm password",
+                placeholder = stringResource(R.string.confirm_password_placeholder),
                 errorMessage = confirmPassErrMsg,
                 isPassword = passwordVisibility,
                 keyboardOptions = KeyboardOptions(
@@ -256,7 +260,7 @@ fun RegisterScreen(
                 confirmPassword.isNotEmpty()
         ) {
             Text(
-                text = "Register",
+                text = stringResource(R.string.register),
                 style = MaterialTheme.typography.bodyMedium,
                 fontWeight = FontWeight.Medium
             )
@@ -280,7 +284,7 @@ fun RegisterScreen(
             )
             Text(
                 modifier = Modifier.weight(1f),
-                text = "Or login with",
+                text = stringResource(R.string.or_login_with),
                 fontWeight = FontWeight(600),
                 color = Color(0xFF6A707C),
                 style = MaterialTheme.typography.bodyMedium,
@@ -322,7 +326,7 @@ fun RegisterScreen(
         ) {
             Icon(
                 imageVector = ImageVector.vectorResource(R.drawable.ic_google),
-                contentDescription = "null",
+                contentDescription = "google_icon",
                 tint = Color.Unspecified
             )
         }
@@ -334,13 +338,13 @@ fun RegisterScreen(
                 end.linkTo(parent.end)
             },
             text = buildAnnotatedString {
-                append("Read")
+                append(stringResource(R.string.read))
                 withStyle(style = SpanStyle(
                     color = MaterialTheme.colorScheme.primary,
                     textDecoration = TextDecoration.Underline
                 )
                 ) {
-                    append(" privacy ")
+                    append(stringResource(R.string.privacy))
                 }
                 append("and")
                 withStyle(style = SpanStyle(
@@ -348,7 +352,7 @@ fun RegisterScreen(
                     textDecoration = TextDecoration.Underline
                 )
                 ) {
-                    append(" policy")
+                    append(stringResource(R.string.policy))
                 }
             }
         )
