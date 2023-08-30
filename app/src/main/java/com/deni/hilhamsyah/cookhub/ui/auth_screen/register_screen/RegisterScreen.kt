@@ -108,7 +108,6 @@ fun RegisterScreen(
 
     LaunchedEffect(key1 = authState.value?.success) {
         if(authState.value?.success != null) {
-            Toast.makeText(context, "Auth success", Toast.LENGTH_LONG).show()
             navController.popBackStack()
             navController.navigate(Screen.HomeScreen.route) {
                 popUpTo(Screen.OnboardingScreen.route) {

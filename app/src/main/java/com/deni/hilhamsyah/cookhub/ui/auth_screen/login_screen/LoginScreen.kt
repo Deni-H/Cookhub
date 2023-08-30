@@ -61,19 +61,17 @@ import com.deni.hilhamsyah.cookhub.ui.components.CustomProgressDialog
 import com.deni.hilhamsyah.cookhub.ui.components.CustomTextField
 import com.deni.hilhamsyah.cookhub.ui.theme.CookhubTheme
 import com.deni.hilhamsyah.cookhub.ui.theme.poppins
-import com.deni.hilhamsyah.cookhub.util.Constant
 import com.deni.hilhamsyah.cookhub.util.InputValidator
 import com.deni.hilhamsyah.cookhub.util.WindowType
 import com.deni.hilhamsyah.cookhub.util.rememberWindowInfo
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @Composable
 fun LoginScreen(
     navController: NavController,
-    authViewModel: AuthViewModel = hiltViewModel()
+    authViewModel: AuthViewModel = hiltViewModel(),
+    loginViewModel: LoginViewModel = hiltViewModel()
 ) {
     val windowInfo = rememberWindowInfo()
     val coroutineScope = rememberCoroutineScope()
@@ -91,8 +89,7 @@ fun LoginScreen(
         if (passwordVisibility) ImageVector.vectorResource(R.drawable.ic_eye_open)
         else ImageVector.vectorResource(R.drawable.ic_eye_closed)
 
-    val launcher =
-        rememberLauncherForActivityResult(
+    val launcher = rememberLauncherForActivityResult(
             contract = ActivityResultContracts.StartActivityForResult()
         ) {
             coroutineScope.launch {
@@ -106,7 +103,6 @@ fun LoginScreen(
 
     LaunchedEffect(key1 = authState.value?.success) {
         if(authState.value?.success != null) {
-            Toast.makeText(context, context.getString(R.string.login_success), Toast.LENGTH_LONG).show()
             navController.popBackStack()
             navController.navigate(Screen.HomeScreen.route) {
                 popUpTo(Screen.OnboardingScreen.route) {
@@ -313,15 +309,7 @@ fun LoginScreen(
                 .fillMaxWidth(),
             shape = RoundedCornerShape(10.dp),
             border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
-            onClick = {
-                val gso = GoogleSignInOptions
-                    .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                    .requestIdToken(Constant.WEB_CLIENT_ID)
-                    .requestEmail()
-                    .build()
-                val googleSignInClient = GoogleSignIn.getClient(context, gso)
-                launcher.launch(googleSignInClient.signInIntent)
-            },
+            onClick = { loginViewModel.googleLoginOnClick(context, launcher) },
             colors = ButtonDefaults.buttonColors(
                 containerColor = MaterialTheme.colorScheme.surface,
             )
