@@ -33,12 +33,6 @@ class AuthViewModel @Inject constructor(
         }
     }
 
-    suspend fun loginWithCredentials(credential: AuthCredential) {
-        authRepository.loginWithCredentials(credentials = credential).collect {
-            handleAuthResult(it)
-        }
-    }
-
     suspend fun registerWithEmailAndPassword(email: String, password: String) {
         authRepository.registerWithEmailAndPassword(email, password).collect {
             handleAuthResult(it)
@@ -47,6 +41,23 @@ class AuthViewModel @Inject constructor(
 
     suspend fun resetPassword(email: String) {
         authRepository.resetPassword(email).collect {
+            handleAuthResult(it)
+        }
+    }
+
+    suspend fun handleActivityResult(activityResult: ActivityResult) {
+        val account = GoogleSignIn.getSignedInAccountFromIntent(activityResult.data)
+        try {
+            val result = account.getResult(ApiException::class.java)
+            val credentials = GoogleAuthProvider.getCredential(result.idToken!!, null)
+            loginWithCredentials(credentials)
+        } catch (it: ApiException) {
+            Log.e(TAG, "${it.message}")
+        }
+    }
+
+    private suspend fun loginWithCredentials(credential: AuthCredential) {
+        authRepository.loginWithCredentials(credentials = credential).collect {
             handleAuthResult(it)
         }
     }
@@ -62,17 +73,6 @@ class AuthViewModel @Inject constructor(
             is Resource.Error -> {
                 _authState.send(AuthState(fail = result.e.message))
             }
-        }
-    }
-
-    suspend fun handleActivityResult(activityResult: ActivityResult) {
-        val account = GoogleSignIn.getSignedInAccountFromIntent(activityResult.data)
-        try {
-            val result = account.getResult(ApiException::class.java)
-            val credentials = GoogleAuthProvider.getCredential(result.idToken!!, null)
-            loginWithCredentials(credentials)
-        } catch (it: ApiException) {
-            Log.e(TAG, "${it.message}")
         }
     }
 
