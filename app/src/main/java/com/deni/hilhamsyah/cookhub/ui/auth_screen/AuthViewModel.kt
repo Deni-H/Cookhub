@@ -86,6 +86,10 @@ class AuthViewModel @Inject constructor(
         launcher.launch(googleSignInClient.signInIntent)
     }
 
+    fun isUserLoggedIn(): Boolean {
+        return authRepository.isLoggedIn()
+    }
+
     companion object {
         const val TAG = "AuthViewModel"
     }

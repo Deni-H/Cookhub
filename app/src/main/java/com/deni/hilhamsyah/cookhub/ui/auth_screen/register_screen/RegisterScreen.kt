@@ -57,12 +57,7 @@ import com.deni.hilhamsyah.cookhub.ui.components.CustomProgressDialog
 import com.deni.hilhamsyah.cookhub.ui.components.CustomTextField
 import com.deni.hilhamsyah.cookhub.ui.theme.CookhubTheme
 import com.deni.hilhamsyah.cookhub.ui.theme.neutral50
-import com.deni.hilhamsyah.cookhub.util.Constant
 import com.deni.hilhamsyah.cookhub.util.InputValidator
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.common.api.ApiException
-import com.google.firebase.auth.GoogleAuthProvider
 import kotlinx.coroutines.launch
 
 @Composable
@@ -89,16 +84,8 @@ fun RegisterScreen(
 
     val launcher =
         rememberLauncherForActivityResult(contract = ActivityResultContracts.StartActivityForResult()) {
-            val account = GoogleSignIn.getSignedInAccountFromIntent(it.data)
-            try {
-                val result = account.getResult(ApiException::class.java)
-                val credentials = GoogleAuthProvider.getCredential(result.idToken!!, null)
-                coroutineScope.launch {
-                    authViewModel.loginWithCredentials(credentials)
-                }
-            } catch (it: ApiException) {
-                println("Error: ${it.message}")
-                println(it)
+            coroutineScope.launch {
+                authViewModel.handleActivityResult(it)
             }
         }
 
@@ -310,15 +297,7 @@ fun RegisterScreen(
                 .fillMaxWidth(),
             shape = RoundedCornerShape(10.dp),
             border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
-            onClick = {
-                val gso = GoogleSignInOptions
-                    .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                    .requestIdToken(Constant.WEB_CLIENT_ID)
-                    .requestEmail()
-                    .build()
-                val googleSignInClient = GoogleSignIn.getClient(context, gso)
-                launcher.launch(googleSignInClient.signInIntent)
-            },
+            onClick = { authViewModel.googleLoginOnClick(context, launcher) },
             colors = ButtonDefaults.buttonColors(
                 containerColor = MaterialTheme.colorScheme.surface,
             )
