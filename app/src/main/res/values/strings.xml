@@ -20,4 +20,8 @@
     <string name="register_now">Register now</string>
     <string name="and">and</string>
     <string name="login_success">Login success</string>
+    <string name="forget_password_sub_title">Don’t worry! it occurs. Please enter the email address linked with your account.</string>
+    <string name="forgot_password_title">Forgot password?</string>
+    <string name="remember_password">"Remember password? "</string>
+    <string name="fail_reset_password">Fail reset password!</string>
 </resources>

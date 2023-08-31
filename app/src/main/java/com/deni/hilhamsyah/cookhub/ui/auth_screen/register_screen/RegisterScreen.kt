@@ -144,8 +144,8 @@ fun RegisterScreen(
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
                 },
-            text = stringResource(R.string.register_sub_title),
-            color = neutral50
+            color = neutral50,
+            text = stringResource(R.string.register_sub_title)
         )
 
         Column(

@@ -60,6 +60,7 @@ import com.deni.hilhamsyah.cookhub.ui.components.CustomAppBar
 import com.deni.hilhamsyah.cookhub.ui.components.CustomProgressDialog
 import com.deni.hilhamsyah.cookhub.ui.components.CustomTextField
 import com.deni.hilhamsyah.cookhub.ui.theme.CookhubTheme
+import com.deni.hilhamsyah.cookhub.ui.theme.neutral50
 import com.deni.hilhamsyah.cookhub.ui.theme.poppins
 import com.deni.hilhamsyah.cookhub.util.InputValidator
 import com.deni.hilhamsyah.cookhub.util.WindowType
@@ -155,7 +156,8 @@ fun LoginScreen(
                 top.linkTo(topBarRef.bottom, 20.dp)
                 start.linkTo(parent.start)
             },
-            text = stringResource(R.string.login_sub_title)
+            text = stringResource(R.string.login_sub_title),
+            color = neutral50
         )
 
         Column(
@@ -218,8 +220,10 @@ fun LoginScreen(
                 end.linkTo(parent.end)
             },
             text = AnnotatedString(stringResource(R.string.forgot_password)),
-            style = MaterialTheme.typography.labelSmall.copy(
-                color = MaterialTheme.colorScheme.primary
+            style = TextStyle(
+                color = MaterialTheme.colorScheme.primary,
+                fontFamily = poppins,
+                fontWeight = FontWeight.Medium
             ),
             onClick = {
                 navController.navigate(Screen.ForgetPasswordScreen.route)

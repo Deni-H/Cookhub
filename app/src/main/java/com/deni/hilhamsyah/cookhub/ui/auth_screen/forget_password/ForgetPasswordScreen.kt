@@ -24,6 +24,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -35,12 +36,14 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.deni.hilhamsyah.cookhub.R
 import com.deni.hilhamsyah.cookhub.navigation.Screen
 import com.deni.hilhamsyah.cookhub.ui.auth_screen.AuthViewModel
 import com.deni.hilhamsyah.cookhub.ui.components.CustomAppBar
 import com.deni.hilhamsyah.cookhub.ui.components.CustomProgressDialog
 import com.deni.hilhamsyah.cookhub.ui.components.CustomTextField
 import com.deni.hilhamsyah.cookhub.ui.theme.CookhubTheme
+import com.deni.hilhamsyah.cookhub.ui.theme.neutral50
 import com.deni.hilhamsyah.cookhub.ui.theme.poppins
 import com.deni.hilhamsyah.cookhub.util.InputValidator
 import kotlinx.coroutines.launch
@@ -72,7 +75,7 @@ fun ForgetPasswordScreen(
 
     LaunchedEffect(key1 = authState.value?.fail) {
         if (authState.value?.fail != null) {
-            Toast.makeText(context, "Fail reset password!", Toast.LENGTH_LONG).show()
+            Toast.makeText(context, context.getString(R.string.fail_reset_password), Toast.LENGTH_LONG).show()
         }
     }
 
@@ -98,7 +101,7 @@ fun ForgetPasswordScreen(
                     end.linkTo(parent.end)
                 },
             navController = navController,
-            title = "Forgot password?"
+            title = stringResource(R.string.forgot_password_title)
         )
         Text(
             modifier = Modifier
@@ -106,7 +109,8 @@ fun ForgetPasswordScreen(
                     top.linkTo(appBarRef.bottom, 8.dp)
                     start.linkTo(parent.start)
                 },
-            text = "Don’t worry! it occurs. Please enter the email address linked with your account."
+            color = neutral50,
+            text = stringResource(R.string.forget_password_sub_title)
         )
         Column(modifier = Modifier.constrainAs(textFieldRef) {
             top.linkTo(descriptionRef.bottom, 20.dp)
@@ -120,7 +124,7 @@ fun ForgetPasswordScreen(
                     email = it
                     emailErrMsg = InputValidator.validateEmail(it)
                 },
-                placeholder = "Email",
+                placeholder = stringResource(R.string.email_placeholder),
                 keyboardOptions = KeyboardOptions(
                     imeAction = ImeAction.Done,
                     keyboardType = KeyboardType.Email
@@ -161,9 +165,9 @@ fun ForgetPasswordScreen(
                 end.linkTo(parent.end)
             }
         ) {
-            Text(text = "Remember password? ")
+            Text(text = stringResource(R.string.remember_password))
             ClickableText(
-                text = AnnotatedString("Login"),
+                text = AnnotatedString(stringResource(R.string.login)),
                 onClick = {
                     navController.popBackStack()
                 },
