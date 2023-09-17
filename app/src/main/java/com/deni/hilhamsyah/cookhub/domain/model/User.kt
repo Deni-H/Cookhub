@@ -25,8 +25,8 @@ data class User(
 
 data class UserName(
     @SerializedName("value")
-    val value: String?,
+    val value: String,
 
     @SerializedName("last_changed")
-    val lastChanged: Long
+    val lastChanged: Long?
 )
