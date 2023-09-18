@@ -1,6 +1,6 @@
 package com.deni.hilhamsyah.cookhub.di
 
-import com.deni.hilhamsyah.cookhub.data.remote.AuthRepositoryImpl
+import com.deni.hilhamsyah.cookhub.data.remote.auth.AuthRepositoryImpl
 import com.deni.hilhamsyah.cookhub.domain.repository.AuthRepository
 import com.google.firebase.auth.FirebaseAuth
 import dagger.Module

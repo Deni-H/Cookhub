@@ -16,7 +16,7 @@ interface AuthRepository {
 
     fun getCurrentUser(): FirebaseUser?
 
-    fun getIdToken(forceRefresh: Boolean): Flow<Resource<String>>
+    suspend fun getIdToken(forceRefresh: Boolean): String
 
     suspend fun resetPassword(email: String): Flow<Resource<Int>>
 
