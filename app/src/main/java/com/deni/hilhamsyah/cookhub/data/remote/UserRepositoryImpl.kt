@@ -32,7 +32,19 @@ class UserRepositoryImpl(
     }
 
     override fun addUserProfile(user: User): Flow<Resource<SuccessResponse>> {
-        TODO("Not yet implemented")
+        return flow {
+            emit(Resource.Loading())
+            val response = userApiRepository.addUserProfile(user)
+            if (response.isSuccessful) {
+                emit(Resource.Success(response.body()!!))
+            }
+
+            if (response.code() == 409) emit(Resource.Error(message = ErrorMessage.HTTP_CONFLICT))
+            if (response.code() == 500) emit(Resource.Error(message = ErrorMessage.INTERNAL_SERVER_ERROR))
+
+        }.catch {
+            emit(Resource.Error(it))
+        }
     }
 
     override fun updateUserProfile(user: User): Flow<Resource<User>> {
