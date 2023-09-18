@@ -21,7 +21,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AuthViewModel @Inject constructor(
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepository,
 ) : ViewModel() {
 
     private val _authState = Channel<AuthState>()
@@ -71,7 +71,7 @@ class AuthViewModel @Inject constructor(
                 _authState.send(AuthState(success = result.data))
             }
             is Resource.Error -> {
-                _authState.send(AuthState(fail = result.e.message))
+                _authState.send(AuthState(fail = result.e?.message))
             }
         }
     }
