@@ -4,26 +4,23 @@ import com.google.gson.annotations.SerializedName
 
 data class User(
 
-    @SerializedName("uid")
-    val uid: String?,
-
     @SerializedName("email")
-    val email: String?,
+    val email: String? = null,
 
     @SerializedName("user_name")
-    val userName: UserName?,
+    val userName: UserName? = null,
 
     @SerializedName("first_name")
-    val firstName: String?,
+    val firstName: String? = null,
 
     @SerializedName("last_name")
-    val lastName: String?,
+    val lastName: String? = null,
 
     @SerializedName("bio")
-    val bio: String?,
+    val bio: String? = null,
 
     @SerializedName("profile_image")
-    val profileImage: String?
+    val profileImage: String? = null
 )
 
 data class UserName(
@@ -31,5 +28,5 @@ data class UserName(
     val value: String,
 
     @SerializedName("last_changed")
-    val lastChanged: Long?
+    val lastChanged: Long? = null
 )
