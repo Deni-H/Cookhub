@@ -116,7 +116,6 @@ fun RegisterScreen(
             .padding(20.dp)
             .background(MaterialTheme.colorScheme.background)
     ) {
-
         val (
             topBarRef,
             descriptionRef,
