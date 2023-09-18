@@ -1,4 +1,4 @@
-package com.deni.hilhamsyah.cookhub.data.remote
+package com.deni.hilhamsyah.cookhub.data.remote.auth
 
 import com.deni.hilhamsyah.cookhub.domain.repository.AuthRepository
 import com.deni.hilhamsyah.cookhub.util.Resource
@@ -52,15 +52,9 @@ class AuthRepositoryImpl (
         return firebaseAuth.currentUser
     }
 
-    override fun getIdToken(forceRefresh: Boolean): Flow<Resource<String>> {
-        return flow {
-            emit(Resource.Loading())
-            val result = getCurrentUser()?.getIdToken(forceRefresh)?.await()
-            val token = result?.token!!
-            emit(Resource.Success(token))
-        }.catch {
-            emit(Resource.Error(it))
-        }
+    override suspend fun getIdToken(forceRefresh: Boolean): String {
+        val result = getCurrentUser()?.getIdToken(forceRefresh)?.await()
+        return result?.token!!
     }
 
     override suspend fun resetPassword(email: String): Flow<Resource<Int>> {
