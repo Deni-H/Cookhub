@@ -25,11 +25,16 @@ android {
 
     buildTypes {
         release {
+            buildConfigField("String", "BASE_URL", "\"https://cookhub.cyclic.cloud/\"")
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+        }
+
+        debug {
+            buildConfigField("String", "BASE_URL", "\"https://cookhub.cyclic.cloud/\"")
         }
     }
     compileOptions {
@@ -41,6 +46,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.4.3"
@@ -96,5 +102,11 @@ dependencies {
 
     // Constraint layout
     implementation("androidx.constraintlayout:constraintlayout-compose:1.0.1")
+
+    // Retrofit
+    val retrofitVersion = "2.9.0"
+    implementation("com.squareup.retrofit2:retrofit:$retrofitVersion")
+    implementation("com.squareup.retrofit2:converter-gson:$retrofitVersion")
+    implementation("com.squareup.okhttp3:logging-interceptor:4.11.0")
 
 }
