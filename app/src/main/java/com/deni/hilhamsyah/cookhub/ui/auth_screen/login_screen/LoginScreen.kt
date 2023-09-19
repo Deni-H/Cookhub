@@ -77,6 +77,7 @@ fun LoginScreen(
     val coroutineScope = rememberCoroutineScope()
 
     val authState = authViewModel.authState.collectAsState(initial = null)
+    val isNewUserState = authViewModel.isNewUserState.collectAsState(initial = null)
     val context = LocalContext.current
 
     var email by rememberSaveable { mutableStateOf("") }
@@ -97,17 +98,14 @@ fun LoginScreen(
             }
         }
 
-    if (authState.value?.isLoading == true) {
+    if (authState.value?.isLoading == true || isNewUserState.value?.isLoading == true) {
         CustomProgressDialog()
     }
 
     LaunchedEffect(key1 = authState.value?.success) {
         if(authState.value?.success != null) {
-            navController.popBackStack()
-            navController.navigate(Screen.HomeScreen.route) {
-                popUpTo(Screen.OnboardingScreen.route) {
-                    inclusive = true
-                }
+            coroutineScope.launch {
+                authViewModel.isNewUser()
             }
         }
     }
@@ -115,6 +113,32 @@ fun LoginScreen(
     LaunchedEffect(key1 = authState.value?.fail) {
         if (authState.value?.fail != null) {
             Toast.makeText(context, authState.value?.fail, Toast.LENGTH_LONG).show()
+        }
+    }
+
+    LaunchedEffect(key1 = isNewUserState.value?.isNewUser) {
+        if (isNewUserState.value?.isNewUser != null) {
+            if (isNewUserState.value?.isNewUser == true) {
+                navController.popBackStack()
+                navController.navigate(Screen.CreateProfileScreen.route) {
+                    popUpTo(Screen.OnboardingScreen.route) {
+                        inclusive = true
+                    }
+                }
+            } else {
+                navController.popBackStack()
+                navController.navigate(Screen.HomeScreen.route) {
+                    popUpTo(Screen.OnboardingScreen.route) {
+                        inclusive = true
+                    }
+                }
+            }
+        }
+    }
+
+    LaunchedEffect(key1 = isNewUserState.value?.fail) {
+        if (isNewUserState.value?.fail != null) {
+            Toast.makeText(context, isNewUserState.value?.fail, Toast.LENGTH_LONG).show()
         }
     }
 
