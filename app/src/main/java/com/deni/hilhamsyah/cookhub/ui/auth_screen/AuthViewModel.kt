@@ -7,8 +7,12 @@ import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.result.ActivityResult
 import androidx.lifecycle.ViewModel
 import com.deni.hilhamsyah.cookhub.domain.repository.AuthRepository
+import com.deni.hilhamsyah.cookhub.domain.repository.UserRepository
+import com.deni.hilhamsyah.cookhub.ui.state.NewUserState
 import com.deni.hilhamsyah.cookhub.util.Constant
+import com.deni.hilhamsyah.cookhub.util.ErrorMessage
 import com.deni.hilhamsyah.cookhub.util.Resource
+import com.deni.hilhamsyah.cookhub.util.TAG
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
@@ -22,10 +26,34 @@ import javax.inject.Inject
 @HiltViewModel
 class AuthViewModel @Inject constructor(
     private val authRepository: AuthRepository,
+    private val userRepository: UserRepository
 ) : ViewModel() {
 
     private val _authState = Channel<AuthState>()
     val authState = _authState.receiveAsFlow()
+
+    private val _isNewUserState = Channel<NewUserState>()
+    val isNewUserState = _isNewUserState.receiveAsFlow()
+
+    suspend fun isNewUser() {
+        userRepository.getUserProfile().collect { result ->
+            when(result) {
+                is Resource.Loading -> {
+                    _isNewUserState.send(NewUserState(isLoading = true))
+                }
+                is Resource.Success -> {
+                    _isNewUserState.send(NewUserState(isNewUser = false))
+                }
+                is Resource.Error -> {
+                    if (result.message == ErrorMessage.NOT_FOUND) {
+                        _isNewUserState.send(NewUserState(isNewUser = true))
+                    } else {
+                        _isNewUserState.send(NewUserState(fail = "Oops! Something went wrong."))
+                    }
+                }
+            }
+        }
+    }
 
     suspend fun loginWithEmailAndPassword(email: String, password: String) {
         authRepository.loginWithEmailAndPassword(email, password).collect {
@@ -88,9 +116,5 @@ class AuthViewModel @Inject constructor(
 
     fun isUserLoggedIn(): Boolean {
         return authRepository.isLoggedIn()
-    }
-
-    companion object {
-        const val TAG = "AuthViewModel"
     }
 }
