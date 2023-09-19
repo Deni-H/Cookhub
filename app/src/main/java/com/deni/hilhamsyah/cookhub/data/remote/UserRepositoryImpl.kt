@@ -22,10 +22,9 @@ class UserRepositoryImpl(
             val response = userApiRepository.getUserProfile()
             if (response.isSuccessful) {
                 emit(Resource.Success(response.body()!!))
+            } else if (response.code() == 404) {
+                emit(Resource.Error(message = ErrorMessage.NOT_FOUND))
             }
-
-            if (response.code() == 400) emit(Resource.Error(message = ErrorMessage.NOT_FOUND))
-
         }.catch {
             emit(Resource.Error(it))
         }
