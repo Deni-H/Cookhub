@@ -7,6 +7,7 @@ sealed class Screen(val route: String) {
     object RegisterScreen: Screen(Routes.REGISTER_SCREEN)
     object ForgetPasswordScreen: Screen(Routes.FORGET_PASSWORD_SCREEN)
     object ForgetPasswordSuccessScreen: Screen(Routes.FORGET_PASSWORD_SUCCESS_SCREEN)
+    object CreateProfileScreen: Screen(Routes.CREATE_PROFILE_SCREEN)
 }
 
 object Routes {
@@ -16,4 +17,5 @@ object Routes {
     const val HOME_SCREEN = "home_screen"
     const val FORGET_PASSWORD_SCREEN = "forget_password_screen"
     const val FORGET_PASSWORD_SUCCESS_SCREEN = "forget_password_success_screen"
+    const val CREATE_PROFILE_SCREEN = "create_profile_screen"
 }

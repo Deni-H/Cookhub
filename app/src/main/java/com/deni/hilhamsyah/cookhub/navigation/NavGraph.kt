@@ -11,6 +11,7 @@ import com.deni.hilhamsyah.cookhub.ui.auth_screen.forget_password.ForgetPassword
 import com.deni.hilhamsyah.cookhub.ui.home_screen.HomeScreen
 import com.deni.hilhamsyah.cookhub.ui.auth_screen.login_screen.LoginScreen
 import com.deni.hilhamsyah.cookhub.ui.auth_screen.register_screen.RegisterScreen
+import com.deni.hilhamsyah.cookhub.ui.create_profile_screen.CreateProfileScreen
 import com.deni.hilhamsyah.cookhub.ui.onboarding_screen.OnboardingScreen
 
 @Composable
@@ -36,11 +37,14 @@ fun NavGraph(
         composable(route = Screen.RegisterScreen.route) {
             RegisterScreen(navController = navHostController)
         }
-         composable(route = Screen.ForgetPasswordScreen.route) {
+        composable(route = Screen.ForgetPasswordScreen.route) {
             ForgetPasswordScreen(navController = navHostController)
         }
-          composable(route = Screen.ForgetPasswordSuccessScreen.route) {
+        composable(route = Screen.ForgetPasswordSuccessScreen.route) {
             ForgetPasswordSuccessScreen(navController = navHostController)
+        }
+        composable(route = Screen.CreateProfileScreen.route) {
+            CreateProfileScreen(navController = navHostController)
         }
 
     }
