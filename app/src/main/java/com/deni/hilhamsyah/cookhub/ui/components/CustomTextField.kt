@@ -51,9 +51,7 @@ fun CustomTextField(
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default
 ) {
-    Column(
-        horizontalAlignment = Alignment.Start
-    ) {
+    Column(horizontalAlignment = Alignment.Start) {
         OutlinedTextField(
             modifier = modifier,
             value = value,

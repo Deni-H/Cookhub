@@ -31,5 +31,5 @@ interface UserRepository {
 
     fun setUserName(userName: Map<String, String>): Flow<Resource<SuccessResponse>>
 
-    fun isUserNameExists(userName: String): Flow<Resource<CheckUserNameResponse>>
+    fun isUserNameExists(userName: Map<String, String>): Flow<Resource<CheckUserNameResponse>>
 }

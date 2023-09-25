@@ -37,4 +37,14 @@ object InputValidator {
 
         return null
     }
+
+    fun userNameValidator(userName: String): String? {
+        return if (userName.matches("^[a-z0-9_]{3,50}$".toRegex())) null
+        else "Invalid username. Usernames must consist of lowercase letters, numbers, and underscores (_) only. The length should be between 3 and 20 characters."
+    }
+
+    fun maxCharValidator(value: String, max: Int): String? {
+        return if (value.length > max) "Max $max characters"
+        else null
+    }
 }

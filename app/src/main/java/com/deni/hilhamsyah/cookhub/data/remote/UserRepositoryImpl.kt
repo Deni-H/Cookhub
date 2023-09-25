@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.flow
 class UserRepositoryImpl(
     private val userApiRepository: UserApiRepository
 ) : UserRepository {
+
     override fun getUserProfile(): Flow<Resource<User>> {
         return flow {
             emit(Resource.Loading())
@@ -34,12 +35,9 @@ class UserRepositoryImpl(
         return flow {
             emit(Resource.Loading())
             val response = userApiRepository.addUserProfile(user)
-            if (response.isSuccessful) {
-                emit(Resource.Success(response.body()!!))
-            }
-
-            if (response.code() == 409) emit(Resource.Error(message = ErrorMessage.HTTP_CONFLICT))
-            if (response.code() == 500) emit(Resource.Error(message = ErrorMessage.INTERNAL_SERVER_ERROR))
+            if (response.isSuccessful) emit(Resource.Success(response.body()!!))
+            else if (response.code() == 409) emit(Resource.Error(message = ErrorMessage.HTTP_CONFLICT))
+            else if (response.code() == 500) emit(Resource.Error(message = ErrorMessage.INTERNAL_SERVER_ERROR))
 
         }.catch {
             emit(Resource.Error(it))
@@ -82,15 +80,22 @@ class UserRepositoryImpl(
         return flow {
             emit(Resource.Loading())
             val response = userApiRepository.setUserName(userName)
-            if (response.isSuccessful) {
-                emit(Resource.Success(response.body()!!))
-            }
+            if (response.isSuccessful) emit(Resource.Success(response.body()!!))
+            else if (response.code() == 429) emit(Resource.Error(message = ErrorMessage.TOO_MANY_REQUEST))
+            else if (response.code() == 409) emit(Resource.Error(message = ErrorMessage.HTTP_CONFLICT))
         }.catch {
             emit(Resource.Error(it))
         }
     }
 
-    override fun isUserNameExists(userName: String): Flow<Resource<CheckUserNameResponse>> {
-        TODO("Not yet implemented")
+    override fun isUserNameExists(userName: Map<String, String>): Flow<Resource<CheckUserNameResponse>> {
+        return flow {
+            emit(Resource.Loading())
+            val response = userApiRepository.isUserNameExists(userName)
+            if (response.isSuccessful) emit(Resource.Success(response.body()!!))
+            else if (response.code() == 409) emit(Resource.Error(message = ErrorMessage.HTTP_CONFLICT))
+        }.catch {
+            emit(Resource.Error(it))
+        }
     }
 }

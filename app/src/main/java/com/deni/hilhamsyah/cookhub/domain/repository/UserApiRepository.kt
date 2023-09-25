@@ -48,5 +48,5 @@ interface UserApiRepository {
     suspend fun setUserName(@Body userName: Map<String, String>): Response<SuccessResponse>
 
     @POST("api/v1/users/username/")
-    suspend fun isUserNameExists(@Body userName: User): Response<CheckUserNameResponse>
+    suspend fun isUserNameExists(@Body userName: Map<String, String>): Response<CheckUserNameResponse>
 }
