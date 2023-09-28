@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "1084746143915",
+    "project_id": "cookhub-e0b47",
+    "storage_bucket": "cookhub-e0b47.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1084746143915:android:226cf134dbadab8bb6ffee",
+        "android_client_info": {
+          "package_name": "com.deni.hilhamsyah.cookhub"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1084746143915-5gqksd2lhkmpnhc83ilgf5ntammo65kq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.deni.hilhamsyah.cookhub",
+            "certificate_hash": "a52bc817132ea337111aaad9ce59a5ec2deaeecd"
+          }
+        },
+        {
+          "client_id": "1084746143915-r9vpj748jfvb4j7upa70brdevq0damql.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.deni.hilhamsyah.cookhub",
+            "certificate_hash": "badc4bd77e805a09ee3a694c7c9444e05aff25c3"
+          }
+        },
+        {
+          "client_id": "1084746143915-rbl5htv6urpdojolf6bqti11hsksdrfd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBxpaAE1SlN2wRAIGIyVisvpFde9kdqJ6Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1084746143915-jiofmti2u3b2ktbujvrbvqjc8obqp79j.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
