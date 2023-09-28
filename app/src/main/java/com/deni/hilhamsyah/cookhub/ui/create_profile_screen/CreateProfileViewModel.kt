@@ -1,9 +1,12 @@
 package com.deni.hilhamsyah.cookhub.ui.create_profile_screen
 
+import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.deni.hilhamsyah.cookhub.domain.model.User
+import com.deni.hilhamsyah.cookhub.domain.repository.FirebaseStorageRepository
 import com.deni.hilhamsyah.cookhub.domain.repository.UserRepository
+import com.deni.hilhamsyah.cookhub.domain.use_case.SaveOnBoardingState
 import com.deni.hilhamsyah.cookhub.util.ErrorMessage
 import com.deni.hilhamsyah.cookhub.util.Resource
 import com.deni.hilhamsyah.cookhub.util.TAG
@@ -14,7 +17,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CreateProfileViewModel @Inject constructor(
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    private val saveOnBoarding: SaveOnBoardingState,
+    private val storageRepository: FirebaseStorageRepository
 ) : ViewModel() {
 
     private val _addProfileState = Channel<CreateProfileState>()
@@ -25,6 +30,31 @@ class CreateProfileViewModel @Inject constructor(
 
     private val _setUserNameState = Channel<CreateProfileState>()
     val setUserNameState = _setUserNameState.receiveAsFlow()
+
+    private val _setProfileImageState = Channel<CreateProfileState>()
+    val setProfileImageState = _setProfileImageState.receiveAsFlow()
+
+    suspend fun setProfileImage(uri: Uri, imageName: String) {
+        storageRepository.setProfileImage(uri, imageName).collect { result ->
+            when(result) {
+                is Resource.Loading -> {
+                    _setProfileImageState.send(CreateProfileState(isLoading = true))
+                }
+
+                is Resource.Success -> {
+                    _setProfileImageState.send(CreateProfileState(success = result.data))
+                }
+
+                is Resource.Error -> {
+                    _setProfileImageState.send(CreateProfileState(fail = "Oops! Something went wrong when uploading profile image"))
+                }
+            }
+        }
+    }
+
+    suspend fun saveOnBoardingState(isComplete: Boolean) {
+        saveOnBoarding(isComplete)
+    }
 
     suspend fun addUserProfile(user: User) {
         userRepository.addUserProfile(user).collect { result ->
