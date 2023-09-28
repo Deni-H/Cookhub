@@ -12,18 +12,22 @@ import com.deni.hilhamsyah.cookhub.ui.home_screen.HomeScreen
 import com.deni.hilhamsyah.cookhub.ui.auth_screen.login_screen.LoginScreen
 import com.deni.hilhamsyah.cookhub.ui.auth_screen.register_screen.RegisterScreen
 import com.deni.hilhamsyah.cookhub.ui.create_profile_screen.CreateProfileScreen
+import com.deni.hilhamsyah.cookhub.ui.onboarding_screen.OnBoardingViewModel
 import com.deni.hilhamsyah.cookhub.ui.onboarding_screen.OnboardingScreen
 
 @Composable
 fun NavGraph(
     navHostController: NavHostController,
-    authViewModel: AuthViewModel = hiltViewModel()
+    authViewModel: AuthViewModel = hiltViewModel(),
+    onBoardingViewModel: OnBoardingViewModel = hiltViewModel(),
 ) {
     NavHost(
         navController = navHostController,
         startDestination =
-            if (authViewModel.isUserLoggedIn()) Screen.HomeScreen.route
-            else Screen.OnboardingScreen.route
+            if (authViewModel.isUserLoggedIn()) {
+                if (onBoardingViewModel.readOnBoardingState()) Screen.HomeScreen.route
+                else Screen.CreateProfileScreen.route
+            } else Screen.OnboardingScreen.route
     ) {
         composable(route = Screen.OnboardingScreen.route) {
             OnboardingScreen(navController = navHostController)
