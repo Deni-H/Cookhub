@@ -57,7 +57,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun CreateProfileScreen(
     navController: NavController,
-    createProfileViewModel: CreateProfileViewModel = hiltViewModel()
+    createProfileViewModel: CreateProfileViewModel = hiltViewModel(),
 ) {
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
@@ -65,6 +65,7 @@ fun CreateProfileScreen(
     val createProfileState = createProfileViewModel.addProfileState.collectAsState(initial = null)
     val checkUsernameState = createProfileViewModel.checkUsernameState.collectAsState(initial = null)
     val setUserNameState = createProfileViewModel.setUserNameState.collectAsState(initial = null)
+    val setProfileImageState = createProfileViewModel.setProfileImageState.collectAsState(initial = null)
 
     var profileUri by rememberSaveable { mutableStateOf<Uri?>(null) }
     var firstName by rememberSaveable { mutableStateOf("") }
@@ -83,7 +84,10 @@ fun CreateProfileScreen(
         profileUri = it
     }
 
-    if (createProfileState.value?.isLoading == true || setUserNameState.value?.isLoading == true) {
+    if (createProfileState.value?.isLoading == true ||
+        setUserNameState.value?.isLoading == true ||
+        setProfileImageState.value?.isLoading == true
+    ) {
         CustomProgressDialog()
     }
 
@@ -105,6 +109,7 @@ fun CreateProfileScreen(
     LaunchedEffect(setUserNameState.value?.success) {
         if(setUserNameState.value?.success != null) {
             Log.d(TAG, "CreateProfileScreen: setUserName success")
+            createProfileViewModel.saveOnBoardingState(true)
             navController.popBackStack()
             navController.navigate(Screen.HomeScreen.route)
         }
@@ -112,7 +117,11 @@ fun CreateProfileScreen(
 
     LaunchedEffect(setUserNameState.value?.fail) {
         if (setUserNameState.value?.fail != null) {
-            Toast.makeText(context, setUserNameState.value?.fail, Toast.LENGTH_LONG).show()
+            Toast.makeText(
+                context,
+                setUserNameState.value?.fail,
+                Toast.LENGTH_LONG
+            ).show()
         }
     }
 
@@ -125,6 +134,33 @@ fun CreateProfileScreen(
     LaunchedEffect(checkUsernameState.value?.fail) {
         if(checkUsernameState.value?.fail != null) {
             userNameErrMsg = checkUsernameState.value?.fail
+        }
+    }
+
+    LaunchedEffect(setProfileImageState.value?.success) {
+        val profileUrl = setProfileImageState.value?.success
+        if(profileUrl != null) {
+            Log.d(TAG, "CreateProfileScreen: uploadImageProfile success")
+            coroutineScope.launch(Dispatchers.Main) {
+                val user = User(
+                    firstName = firstName,
+                    lastName = lastName,
+                    bio = bio,
+                    profileImage = profileUrl
+                )
+
+                createProfileViewModel.addUserProfile(user)
+            }
+        }
+    }
+
+    LaunchedEffect(setProfileImageState.value?.fail) {
+        if(setProfileImageState.value?.fail != null) {
+            Toast.makeText(
+                context,
+                setProfileImageState.value?.fail,
+                Toast.LENGTH_LONG
+            ).show()
         }
     }
 
@@ -175,7 +211,7 @@ fun CreateProfileScreen(
                 lastName = it
                 lastNameErrMsg = InputValidator.maxCharValidator(it, 50)
             },
-            placeholder = "Last Name",
+            placeholder = "Last Name (optional)",
             errorMessage = lastNameErrMsg,
             keyboardOptions = KeyboardOptions(
                 imeAction = ImeAction.Next,
@@ -215,7 +251,7 @@ fun CreateProfileScreen(
                 bio = it
                 bioErrMsg = InputValidator.maxCharValidator(it, 100)
             },
-            placeholder = "Bio",
+            placeholder = "Bio (optional)",
             errorMessage = bioErrMsg,
             singleLine = false,
             maxLines = 5
@@ -229,12 +265,16 @@ fun CreateProfileScreen(
             shape = RoundedCornerShape(10.dp),
             onClick = {
                 coroutineScope.launch(Dispatchers.Main) {
-                    createProfileViewModel.addUserProfile(User(
+                    val user = User(
                         firstName = firstName,
                         lastName = lastName,
-                        profileImage = profileUri.toString(),
                         bio = bio
-                    ))
+                    )
+
+                    if (profileUri == null) createProfileViewModel.addUserProfile(user)
+                    else {
+                        createProfileViewModel.setProfileImage(profileUri!!, "image.jpg")
+                    }
                 }
             },
             enabled = firstNameErrMsg == null && firstName.isNotEmpty() &&
